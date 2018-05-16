@@ -15,5 +15,5 @@ This project is a the Node.js/Express/MongoDB backend to the MTG_Price project w
 ### Development Build and Run
 
 ```
-  $ node ./bin/www
+  $ node start
 ```
