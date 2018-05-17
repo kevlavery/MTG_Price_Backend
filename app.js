@@ -4,8 +4,19 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var mongoose = require('mongoose');
+var mongoUrl = 'mongodb://localhost/MTG_Price';
+mongoose.connect(mongoUrl, function(err){
+  if (err) {
+    console.log("Error connecting to MongoDB");
+    process.exit(1);
+  }
+});
+
+//Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
+var TCGAuthentication = require('./routes/token');
 
 var app = express();
 
@@ -19,8 +30,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+TCGAuthentication.getToken();
+
 app.use('/', indexRouter);
 app.use('/sets', sets);
+
+//close connection on quit
+process.on('SIGINT', function(){
+  mongoose.connection.close(function(){
+   console.log("Closing the mongodb connection");
+    process.exit(0);
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
