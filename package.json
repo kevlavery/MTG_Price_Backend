@@ -11,6 +11,9 @@
     "express": "~4.16.0",
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
-    "morgan": "~1.9.0"
+    "mongoose": "^5.1.1",
+    "morgan": "~1.9.0",
+    "request": "^2.86.0",
+    "request-promise": "^4.2.2"
   ***REMOVED***
 ***REMOVED***
