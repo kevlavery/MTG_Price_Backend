@@ -16,7 +16,7 @@ mongoose.connect(mongoUrl, function(err)***REMOVED***
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
-var TCGAuthentication = require('./routes/token');
+var TCGAuthentication = require('./utility/token');
 
 var app = express();
 
