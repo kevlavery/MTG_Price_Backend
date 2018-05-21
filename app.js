@@ -30,7 +30,11 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-TCGAuthentication.getToken();
+let token = await TCGAuthentication.getToken();
+
+if (token) ***REMOVED***
+  console.log(token);
+***REMOVED***
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
