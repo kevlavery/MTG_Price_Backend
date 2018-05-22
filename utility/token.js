@@ -7,29 +7,26 @@ const data = 'grant_type=client_credentials&client_id='
                 + '&client_secret='
                 + restCredentials.privateKey;
 
-exports.getToken = async() => ***REMOVED***
-    let token = "empty";
-    let tokenQuery = Token.findOne();
-    tokenQuery.select("access_token expiry_date");
-    tokenQuery.exec((err, dbToken) => ***REMOVED***
-        if (err) console.log(err);
-
-        //console.log(dbToken.access_token);
-        var expiry_date = new Date(dbToken.expiry_date);
-        if(expiry_date >= Date.now()) ***REMOVED***
-            token = getRESTToken();
-            //console.log(token)
-        ***REMOVED*** else ***REMOVED***
-            token = dbToken.access_token.toString();
-            //console.log(dbToken.access_token)
+exports.getToken = async () => ***REMOVED***
+    try ***REMOVED***
+        let tokenQuery = await Token.findOne(***REMOVED******REMOVED***).exec();
+        let token;
+        //console.log(tokenQuery.access_token);
+        var expiry_date = new Date(tokenQuery.expiry_date);
+        if(expiry_date = Date.now()) ***REMOVED***
+            await getRESTToken();
+            tokenQuery = await Token.findOne(***REMOVED******REMOVED***).exec();
         ***REMOVED***
+        token = tokenQuery.access_token;
+
         return token;
-    ***REMOVED***);
-    return token;
+    ***REMOVED*** catch (error) ***REMOVED***
+        console.log(error);
+    ***REMOVED***
 ***REMOVED***
 
-getRESTToken = () => ***REMOVED***
-    request(***REMOVED***
+const getRESTToken = async () => ***REMOVED***
+    return request(***REMOVED***
         url: "http://api.tcgplayer.com/token", //look to see if they support HTTPS
         method: "POST",
         headers: ***REMOVED***
@@ -46,7 +43,6 @@ getRESTToken = () => ***REMOVED***
         currentToken.save((err) => ***REMOVED***
             if (err) console.log(err);
         ***REMOVED***);
-        return token.access_token;
     ***REMOVED***);
 ***REMOVED***
 

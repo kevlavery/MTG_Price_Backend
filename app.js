@@ -30,11 +30,15 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-let token = await TCGAuthentication.getToken();
+TCGAuthentication.getToken().then((token) => console.log(token));
 
-if (token) ***REMOVED***
-  console.log(token);
-***REMOVED***
+//token.catch((err) => console.log(err));
+//console.log("main function token "+token);
+
+// token.then((err, dbToken) => ***REMOVED***
+//   console.log(err)
+//   console.log(dbToken)
+// ***REMOVED***)
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
