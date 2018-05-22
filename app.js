@@ -30,11 +30,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-let token = await TCGAuthentication.getToken();
+TCGAuthentication.getToken().then((token) => console.log(token));
 
-if (token) {
-  console.log(token);
-}
+//token.catch((err) => console.log(err));
+//console.log("main function token "+token);
+
+// token.then((err, dbToken) => {
+//   console.log(err)
+//   console.log(dbToken)
+// })
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
