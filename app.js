@@ -16,7 +16,8 @@ mongoose.connect(mongoUrl, function(err)***REMOVED***
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
-var TCGAuthentication = require('./utility/token');
+//var TCGAuthentication = require('./utility/token');
+var populateSets = require('./utility/populateSets');
 
 var app = express();
 
@@ -30,15 +31,8 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-TCGAuthentication.getToken().then((token) => console.log(token));
-
-//token.catch((err) => console.log(err));
-//console.log("main function token "+token);
-
-// token.then((err, dbToken) => ***REMOVED***
-//   console.log(err)
-//   console.log(dbToken)
-// ***REMOVED***)
+//TCGAuthentication.getToken().then((token) => console.log(token));
+populateSets.getSets();
 
 app.use('/', indexRouter);
 app.use('/sets', sets);

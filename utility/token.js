@@ -11,7 +11,6 @@ exports.getToken = async () => ***REMOVED***
     try ***REMOVED***
         let tokenQuery = await Token.findOne(***REMOVED******REMOVED***).exec();
         let token;
-        //console.log(tokenQuery.access_token);
         var expiry_date = new Date(tokenQuery.expiry_date);
         if(expiry_date = Date.now()) ***REMOVED***
             await getRESTToken();
