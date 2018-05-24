@@ -1,30 +1,28 @@
 var request = require('request');
-var token = require('./token');
+var TCGAuthentication = require('./token');
 
 exports.getSets = () => {
-    var token = 
-
-    request({
-        url: "https://api.tcgplayer.com/catalog/categories/1/search/manifest", 
-        method: "GET",
-        headers: {
-            "Authorization": authorization,
-            "Content-Type": "application/json",
-            "Accept": "application/json"  
-        },
-        body: data
-    }, (error, response, body) => {
-        var token = JSON.parse(body);
-        var currentToken = new token({
-            access_token: token.access_token,
-            expiry_date: token['.expires']
-        });
+    TCGAuthentication.getToken().then((token) => { 
+        let bearer = token;
         
-        currentToken.save((err) => {
-            if (err) console.log(err);
+        const authorization = 'bearer ' + bearer;
+
+        console.log(authorization);
+
+        request({
+            url: "https://api.tcgplayer.com/catalog/categories/1/search/manifest", 
+            method: "GET",
+            headers: {
+                "Authorization": authorization,
+                "Content-Type": "application/json",
+                "Accept": "application/json"  
+            }
+        }, (error, response, body) => {
+            result = JSON.parse(body);
+            console.log(result.results[0].filters[2].items);
         });
-        console.log(currentToken);
     });
+    
 }
 
 
