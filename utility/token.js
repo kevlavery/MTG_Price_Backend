@@ -1,6 +1,6 @@
 var restCredentials = require('../data/TCGConnectionData.json');
 var request = require('request');
-var Token = require('../models/token')
+var Token = require('../models/token');
 
 const data = 'grant_type=client_credentials&client_id='
                 + restCredentials.publicKey
@@ -17,7 +17,6 @@ exports.getToken = async () => {
             tokenQuery = await Token.findOne({}).exec();
         }
         token = tokenQuery.access_token;
-
         return token;
     } catch (error) {
         console.log(error);
