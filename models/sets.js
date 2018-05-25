@@ -2,8 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var setsSchema = new Schema(***REMOVED***
-  access_token: String,
-  expiry_date: Date
+  name: String,
+  count: Number,
+  cardIds: [Number]
 ***REMOVED***);
 
-module.exports = mongoose.model('sets_list', tokenSchema);
+module.exports = mongoose.model('set', setsSchema);
