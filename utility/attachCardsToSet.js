@@ -2,18 +2,27 @@ var request = require('request');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 
-exports.getSets = async () => ***REMOVED***
+exports.populateSet = async (setName) => ***REMOVED***
+    // let setQuery = await Sets.findOne(***REMOVED***"name": setName***REMOVED***).exec();
+    //     console.log(setQuery);
+
     TCGAuthentication.getToken().then((token) => ***REMOVED*** 
         let bearer = token;
         const authorization = 'bearer ' + bearer;
-
-        try ***REMOVED***
-            let setQuery = await Sets.find(***REMOVED******REMOVED***).exec();
-        ***REMOVED*** catch (error) ***REMOVED***
-            console.log(error);
-        ***REMOVED***  
-        
-        return request(***REMOVED***
+        let data = ***REMOVED***
+            "offset": 0,
+            "limit":500,
+            "sort": "ProductName DES",
+            "filters": [
+                ***REMOVED***
+                    "name": "SetName",
+                    "values": [
+                    setName
+                    ]
+                ***REMOVED***
+            ]
+        ***REMOVED***
+        request(***REMOVED***
             url: "http://api.tcgplayer.com/catalog/categories/1/search",
             method: "POST",
             headers: ***REMOVED***
@@ -21,11 +30,32 @@ exports.getSets = async () => ***REMOVED***
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             ***REMOVED***,
-            body: data
-        ***REMOVED***, (error, response, body) => ***REMOVED***
+            body: JSON.stringify(data)
+        ***REMOVED***, async (error, response, body) => ***REMOVED***
+            //console.log(error);
+            const cardsResult = JSON.parse(body);
+            const cards = cardsResult.results;
+            const totalItems = cardsResult.totalItems; 
+            //console.log(cards)
+            try ***REMOVED***
+                //let setQuery = await Sets.findOne(***REMOVED***"name": setName***REMOVED***).exec();
+                //const setQuery = await Sets.aggregate([***REMOVED***$match: ***REMOVED***name: setName***REMOVED******REMOVED***, ***REMOVED***$project:***REMOVED***count:***REMOVED***$size:"$cardIds"***REMOVED******REMOVED******REMOVED***]).exec();
+                // if (Array.isArray(setQuery) && setQuery.length > 0 && setQuery[0].count < totalItems) ***REMOVED***
+                //     console.log(setQuery[0].count);
+
+                // ***REMOVED***
+                const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
+
+                if (!setQuery.count || setQuery.count < totalItems) ***REMOVED***
+                    setQuery.set(***REMOVED***cardIds: cards,
+                                  count: totalItems***REMOVED***);
+                    setQuery.save((err) => ***REMOVED***
+                        if (err) console.log(err);
+                    ***REMOVED***);
+                ***REMOVED***
+            ***REMOVED*** catch (error) ***REMOVED***
+                console.log(error);
+            ***REMOVED***
+        ***REMOVED***)
     ***REMOVED***);   
 ***REMOVED***
-
-
-
-  

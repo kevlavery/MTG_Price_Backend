@@ -17,6 +17,7 @@ mongoose.connect(mongoUrl, function(err)***REMOVED***
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
 //var TCGAuthentication = require('./utility/token');
+var fillSet = require('./utility/attachCardsToSet');
 var populateSets = require('./utility/populateSets');
 
 var app = express();
@@ -31,8 +32,8 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//TCGAuthentication.getToken().then((token) => console.log(token));
 populateSets.getSets();
+fillSet.populateSet("Modern Masters 2017");
 
 app.use('/', indexRouter);
 app.use('/sets', sets);

@@ -16,12 +16,12 @@ exports.getSets = async () => ***REMOVED***
                 "Accept": "application/json"  
             ***REMOVED***
         ***REMOVED***, (error, response, body) => ***REMOVED***
+            //get list of set names from response
             result = JSON.parse(body).results[0].filters[2].items;
 
             result.forEach(async (set) => ***REMOVED***
-                console.log(set.text);
                 try ***REMOVED***
-                    let setQuery = await Sets.findOne(***REMOVED***"name": set.text***REMOVED***).exec();
+                    const setQuery = await Sets.findOne(***REMOVED***"name": set.text***REMOVED***).exec();
                     if(!setQuery) ***REMOVED***
                         let newSet = new Sets(***REMOVED***
                             name: set.text
