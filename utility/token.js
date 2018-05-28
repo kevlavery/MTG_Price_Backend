@@ -10,14 +10,13 @@ const data = 'grant_type=client_credentials&client_id='
 exports.getToken = async () => {
     try {
         let tokenQuery = await Token.findOne({}).exec();
-        let token;
+        
         var expiry_date = new Date(tokenQuery.expiry_date);
         if(expiry_date = Date.now()) {
             await getRESTToken();
             tokenQuery = await Token.findOne({}).exec();
         }
-        token = tokenQuery.access_token;
-        return token;
+        return tokenQuery.access_token;
     } catch (error) {
         console.log(error);
     }
@@ -28,7 +27,7 @@ const getRESTToken = async () => {
         url: "http://api.tcgplayer.com/token", //look to see if they support HTTPS
         method: "POST",
         headers: {
-            "content-type": "application/json"  
+            "Content-Type": "application/json"  
         },
         body: data
     }, (error, response, body) => {
