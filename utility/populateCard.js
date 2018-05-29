@@ -3,15 +3,15 @@ var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 
 exports.getCard = async (cardId) => {
-    TCGAuthentication.getToken().then((token) => { 
+    TCGAuthentication.getToken().then(async (token) => { 
+        console.log(token)
         let bearer = token;
         const authorization = 'bearer ' + bearer;
-        
         let test = await Promise.all([
             getCardDetail(authorization, cardId), 
             getCardPrice(authorization, cardId)
         ])
-        console.log(test)
+        //console.log(test)
     });   
 }
 
@@ -25,6 +25,7 @@ const getCardPrice = async (authorization, cardId) => {
             "Accept": "application/json"
         }
     }, (error, response, body) => {
+        console.log('error getting card price:', error);
         const result = JSON.parse(body);
 
     })
@@ -40,6 +41,7 @@ const getCardDetail = async (authorization, cardId) => {
             "Accept": "application/json"
         }
     }, (error, response, body) => {
+        console.log('error getting card details:', error);
         const result = JSON.parse(body);
     })
 }

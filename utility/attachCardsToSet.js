@@ -29,6 +29,7 @@ exports.populateSet = async (setName) => {
             },
             body: JSON.stringify(data)
         }, async (error, response, body) => {
+            console.log('error getting cards for set', setName, ':', error);
             const cardsResult = JSON.parse(body);
             const cards = cardsResult.results;
             const totalItems = cardsResult.totalItems; 
