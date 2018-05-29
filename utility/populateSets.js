@@ -18,6 +18,7 @@ exports.getSets = async () => ***REMOVED***
             ***REMOVED***
         ***REMOVED***, (error, response, body) => ***REMOVED***
             //get list of set names from response
+            console.log('error getting list of cards:', error);
             result = JSON.parse(body).results[0].filters[2].items;
 
             result.forEach(async (set) => ***REMOVED***

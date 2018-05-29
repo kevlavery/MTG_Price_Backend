@@ -29,6 +29,7 @@ exports.populateSet = async (setName) => ***REMOVED***
             ***REMOVED***,
             body: JSON.stringify(data)
         ***REMOVED***, async (error, response, body) => ***REMOVED***
+            console.log('error getting cards for set', setName, ':', error);
             const cardsResult = JSON.parse(body);
             const cards = cardsResult.results;
             const totalItems = cardsResult.totalItems; 
