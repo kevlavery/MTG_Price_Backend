@@ -4,7 +4,7 @@ var Sets = require('../models/sets');
 
 exports.getCard = async (cardId) => {
     TCGAuthentication.getToken().then(async (token) => { 
-        console.log(token)
+        console.log("populate card token:", token)
         let bearer = token;
         const authorization = 'bearer ' + bearer;
         let test = await Promise.all([
