@@ -3,9 +3,6 @@ var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 
 exports.populateSet = async (setName) => {
-    // let setQuery = await Sets.findOne({"name": setName}).exec();
-    //     console.log(setQuery);
-
     TCGAuthentication.getToken().then((token) => { 
         let bearer = token;
         const authorization = 'bearer ' + bearer;
@@ -32,18 +29,10 @@ exports.populateSet = async (setName) => {
             },
             body: JSON.stringify(data)
         }, async (error, response, body) => {
-            //console.log(error);
             const cardsResult = JSON.parse(body);
             const cards = cardsResult.results;
             const totalItems = cardsResult.totalItems; 
-            //console.log(cards)
             try {
-                //let setQuery = await Sets.findOne({"name": setName}).exec();
-                //const setQuery = await Sets.aggregate([{$match: {name: setName}}, {$project:{count:{$size:"$cardIds"}}}]).exec();
-                // if (Array.isArray(setQuery) && setQuery.length > 0 && setQuery[0].count < totalItems) {
-                //     console.log(setQuery[0].count);
-
-                // }
                 const setQuery = await Sets.findOne({name : setName}).exec();
 
                 if (!setQuery.count || setQuery.count < totalItems) {
