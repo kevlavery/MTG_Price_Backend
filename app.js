@@ -16,10 +16,9 @@ mongoose.connect(mongoUrl, function(err)***REMOVED***
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
-//var TCGAuthentication = require('./utility/token');
-var fillSet = require('./utility/attachCardsToSet');
-var populateSets = require('./utility/populateSets');
 
+var populateSets = require('./utility/populateSets');
+var getCardDetails = require('./utility/populateCard');
 var app = express();
 
 // view engine setup
@@ -32,8 +31,8 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-populateSets.getSets();
-fillSet.populateSet("Modern Masters 2017");
+//populateSets.getSets();
+getCardDetails.getCard(128646);
 
 app.use('/', indexRouter);
 app.use('/sets', sets);

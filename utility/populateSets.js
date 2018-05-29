@@ -1,6 +1,7 @@
 var request = require('request');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
+var AttachCards = require('./attachCardsToSet');
 
 exports.getSets = async () => ***REMOVED***
     TCGAuthentication.getToken().then((token) => ***REMOVED*** 
@@ -30,6 +31,7 @@ exports.getSets = async () => ***REMOVED***
                             if (err) console.log(err);
                         ***REMOVED***);
                     ***REMOVED***
+                    AttachCards.populateSet(set.text);
                 ***REMOVED*** catch (error) ***REMOVED***
                     console.log(error);
                 ***REMOVED***

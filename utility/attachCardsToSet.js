@@ -3,9 +3,6 @@ var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 
 exports.populateSet = async (setName) => ***REMOVED***
-    // let setQuery = await Sets.findOne(***REMOVED***"name": setName***REMOVED***).exec();
-    //     console.log(setQuery);
-
     TCGAuthentication.getToken().then((token) => ***REMOVED*** 
         let bearer = token;
         const authorization = 'bearer ' + bearer;
@@ -32,18 +29,10 @@ exports.populateSet = async (setName) => ***REMOVED***
             ***REMOVED***,
             body: JSON.stringify(data)
         ***REMOVED***, async (error, response, body) => ***REMOVED***
-            //console.log(error);
             const cardsResult = JSON.parse(body);
             const cards = cardsResult.results;
             const totalItems = cardsResult.totalItems; 
-            //console.log(cards)
             try ***REMOVED***
-                //let setQuery = await Sets.findOne(***REMOVED***"name": setName***REMOVED***).exec();
-                //const setQuery = await Sets.aggregate([***REMOVED***$match: ***REMOVED***name: setName***REMOVED******REMOVED***, ***REMOVED***$project:***REMOVED***count:***REMOVED***$size:"$cardIds"***REMOVED******REMOVED******REMOVED***]).exec();
-                // if (Array.isArray(setQuery) && setQuery.length > 0 && setQuery[0].count < totalItems) ***REMOVED***
-                //     console.log(setQuery[0].count);
-
-                // ***REMOVED***
                 const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
 
                 if (!setQuery.count || setQuery.count < totalItems) ***REMOVED***
