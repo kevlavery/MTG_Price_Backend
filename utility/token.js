@@ -10,23 +10,9 @@ const data = 'grant_type=client_credentials&client_id='
 exports.getToken = async () => ***REMOVED***
     try ***REMOVED***
         let tokenQuery = await Token.findOne(***REMOVED******REMOVED***).exec();
-        
-
-        //let expiry_date = new Date(tokenQuery.expiry_date);
-
         if(!tokenQuery || new Date(tokenQuery.expiry_date) <= Date.now()) ***REMOVED***
             tokenQuery = await getRESTToken();
         ***REMOVED***
-
-
-        // if(tokenQuery) ***REMOVED***
-        //     var expiry_date = new Date(tokenQuery.expiry_date);
-        //     if (expiry_date <= Date.now()) ***REMOVED***
-        //         tokenQuery = await getRESTToken();
-        //     ***REMOVED***
-        // ***REMOVED*** else ***REMOVED***
-        //     tokenQuery = await getRESTToken();
-        // ***REMOVED***
         return tokenQuery.access_token;
     ***REMOVED*** catch (error) ***REMOVED***
         console.log(error);
