@@ -1,22 +1,36 @@
-var request = require('request');
+var requestPromise = require('request-promise-native');
 var TCGAuthentication = require('./token');
-var Sets = require('../models/sets');
+var Card = require('../models/card');
 
 exports.getCard = async (cardId) => ***REMOVED***
     TCGAuthentication.getToken().then(async (token) => ***REMOVED*** 
-        console.log("populate card token:", token)
         let bearer = token;
         const authorization = 'bearer ' + bearer;
-        let test = await Promise.all([
+        let cardQuery = await Promise.all([
             getCardDetail(authorization, cardId), 
             getCardPrice(authorization, cardId)
         ])
-        //console.log(test)
+        const cardDetail = JSON.parse(cardQuery[0]);
+        const cardPrice = JSON.parse(cardQuery[1]);       
+        let newCard = ***REMOVED***
+            productId: cardId,
+            name: cardDetail.results[0].productName,
+            imageURL: cardDetail.results[0].image,
+            medPrice: cardPrice.results[1].midPrice
+        ***REMOVED***;
+        searchedCard = Card.findOneAndUpdate(
+            ***REMOVED***productId: cardId***REMOVED***,
+            newCard,
+            ***REMOVED***upsert: true***REMOVED***
+        ).exec()
+        .then((response) => ***REMOVED***console.log("response: "+response)***REMOVED***)
+        .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);
+            
     ***REMOVED***);   
 ***REMOVED***
 
 const getCardPrice = async (authorization, cardId) => ***REMOVED***
-    return request(***REMOVED***
+    return requestPromise(***REMOVED***
         url: "http://api.tcgplayer.com/pricing/product/"+cardId,
         method: "GET",
         headers: ***REMOVED***
@@ -24,15 +38,11 @@ const getCardPrice = async (authorization, cardId) => ***REMOVED***
             "Content-Type": "application/json",
             "Accept": "application/json"
         ***REMOVED***
-    ***REMOVED***, (error, response, body) => ***REMOVED***
-        console.log('error getting card price:', error);
-        const result = JSON.parse(body);
-
     ***REMOVED***)
 ***REMOVED***
 
 const getCardDetail = async (authorization, cardId) => ***REMOVED***
-    return request(***REMOVED***
+    return requestPromise(***REMOVED***
         url: "http://api.tcgplayer.com/catalog/products/"+cardId,
         method: "GET",
         headers: ***REMOVED***
@@ -40,8 +50,5 @@ const getCardDetail = async (authorization, cardId) => ***REMOVED***
             "Content-Type": "application/json",
             "Accept": "application/json"
         ***REMOVED***
-    ***REMOVED***, (error, response, body) => ***REMOVED***
-        console.log('error getting card details:', error);
-        const result = JSON.parse(body);
     ***REMOVED***)
 ***REMOVED***

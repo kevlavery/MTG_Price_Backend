@@ -1,7 +1,7 @@
 var request = require('request');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
-
+var PopulateCard = require('./populateCard');
 exports.populateSet = async (setName) => ***REMOVED***
     TCGAuthentication.getToken().then((token) => ***REMOVED*** 
         let bearer = token;
@@ -29,7 +29,7 @@ exports.populateSet = async (setName) => ***REMOVED***
             ***REMOVED***,
             body: JSON.stringify(data)
         ***REMOVED***, async (error, response, body) => ***REMOVED***
-            console.log('error getting cards for set', setName, ':', error);
+            if (error) console.log('error getting cards for set', setName, ':', error);
             const cardsResult = JSON.parse(body);
             const cards = cardsResult.results;
             const totalItems = cardsResult.totalItems; 
