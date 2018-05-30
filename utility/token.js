@@ -10,23 +10,9 @@ const data = 'grant_type=client_credentials&client_id='
 exports.getToken = async () => {
     try {
         let tokenQuery = await Token.findOne({}).exec();
-        
-
-        //let expiry_date = new Date(tokenQuery.expiry_date);
-
         if(!tokenQuery || new Date(tokenQuery.expiry_date) <= Date.now()) {
             tokenQuery = await getRESTToken();
         }
-
-
-        // if(tokenQuery) {
-        //     var expiry_date = new Date(tokenQuery.expiry_date);
-        //     if (expiry_date <= Date.now()) {
-        //         tokenQuery = await getRESTToken();
-        //     }
-        // } else {
-        //     tokenQuery = await getRESTToken();
-        // }
         return tokenQuery.access_token;
     } catch (error) {
         console.log(error);
