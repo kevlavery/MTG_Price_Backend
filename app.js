@@ -31,8 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//populateSets.getSets();
-getCardDetails.getCard(128646);
+populateSets.getSets();
+//getCardDetails.getCard(128640);
 
 app.use('/', indexRouter);
 app.use('/sets', sets);

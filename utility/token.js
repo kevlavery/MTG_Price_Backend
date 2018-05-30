@@ -1,5 +1,5 @@
 var restCredentials = require('../data/TCGConnectionData.json');
-var rPromise = require('request-promise-native');
+var requestPromise = require('request-promise-native');
 var Token = require('../models/token');
 
 const data = 'grant_type=client_credentials&client_id='

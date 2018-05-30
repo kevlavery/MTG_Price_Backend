@@ -18,12 +18,14 @@ exports.getSets = async () => {
             }
         }, (error, response, body) => {
             //get list of set names from response
-            console.log('error getting list of cards:', error);
+            if(error) console.log('error getting list of cards:', error);
+
             result = JSON.parse(body).results[0].filters[2].items;
 
             result.forEach(async (set) => {
                 try {
                     const setQuery = await Sets.findOne({"name": set.text}).exec();
+                    //if set doesn't exist in db add it
                     if(!setQuery) {
                         let newSet = new Sets({
                             name: set.text
