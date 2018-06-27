@@ -20,7 +20,7 @@ exports.getToken = async () => ***REMOVED***
 ***REMOVED***
 
 const getRESTToken = () => ***REMOVED***
-   return rPromise(***REMOVED***
+   return requestPromise(***REMOVED***
         url: "http://api.tcgplayer.com/token", //look to see if they support HTTPS
         method: "POST",
         headers: ***REMOVED***
