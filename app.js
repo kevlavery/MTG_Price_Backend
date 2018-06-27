@@ -16,6 +16,7 @@ mongoose.connect(mongoUrl, function(err){
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
+var card = require('./routes/card');
 
 var populateSets = require('./utility/populateSets');
 var getCardDetails = require('./utility/populateCard');
@@ -31,11 +32,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-populateSets.getSets();
+//populateSets.getSets();
 //getCardDetails.getCard(128640);
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
+app.use('/card/:id', card);
+
 
 //close connection on quit
 process.on('SIGINT', function(){
