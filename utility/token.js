@@ -20,7 +20,7 @@ exports.getToken = async () => {
 }
 
 const getRESTToken = () => {
-   return rPromise({
+   return requestPromise({
         url: "http://api.tcgplayer.com/token", //look to see if they support HTTPS
         method: "POST",
         headers: {

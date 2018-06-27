@@ -2,7 +2,7 @@ var requestPromise = require('request-promise-native');
 var TCGAuthentication = require('./token');
 var Card = require('../models/card');
 
-exports.getCard = async (cardId) => {
+exports.addCard = async (cardId) => {
     TCGAuthentication.getToken().then(async (token) => { 
         let bearer = token;
         const authorization = 'bearer ' + bearer;
@@ -16,8 +16,11 @@ exports.getCard = async (cardId) => {
             productId: cardId,
             name: cardDetail.results[0].productName,
             imageURL: cardDetail.results[0].image,
-            medPrice: cardPrice.results[1].midPrice
+            medPrice: cardPrice.results[1].midPrice,
+            lowPrice: cardPrice.results[1].lowPrice,
+            highPrice: cardPrice.results[1].highPrice
         };
+        //updates object or creates new if none found
         searchedCard = Card.findOneAndUpdate(
             {productId: cardId},
             newCard,

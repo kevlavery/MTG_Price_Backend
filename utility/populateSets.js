@@ -19,28 +19,30 @@ exports.getSets = async () => {
         }, (error, response, body) => {
             //get list of set names from response
             if(error) console.log('error getting list of cards:', error);
-
-            result = JSON.parse(body).results[0].filters[2].items;
-
-            result.forEach(async (set) => {
-                try {
-                    const setQuery = await Sets.findOne({"name": set.text}).exec();
-                    //if set doesn't exist in db add it
-                    if(!setQuery) {
-                        let newSet = new Sets({
-                            name: set.text
-                        });
-                        newSet.save((err) => {
-                            if (err) console.log(err);
-                        });
-                    }
-                    AttachCards.populateSet(set.text);
-                } catch (error) {
-                    console.log(error);
-                }
-            });
+            return JSON.parse(body).results[0].filters[2].items;           
         });
     });   
+}
+
+exports.populateSets = async (setResult) => {
+    setResult.forEach(async (set) => {
+        try {
+            const setQuery = await Sets.findOne({"name": set.text}).exec();
+            //if set doesn't exist in db add it
+            if(!setQuery) {
+                let newSet = new Sets({
+                    name: set.text
+                });
+                newSet.save((err) => {
+                    if (err) console.log(err);
+                });
+            }
+            setDetails = await AttachCards.getSet(set.text);
+            AttachCards.populateSetCards(setDetails, set.text);
+        } catch (error) {
+            console.log(error);
+        }
+    });
 }
 
 

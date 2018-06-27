@@ -2,7 +2,8 @@ var request = require('request');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 var PopulateCard = require('./populateCard');
-exports.populateSet = async (setName) => {
+
+exports.getSet = async (setName) => {
     TCGAuthentication.getToken().then((token) => { 
         let bearer = token;
         const authorization = 'bearer ' + bearer;
@@ -30,22 +31,30 @@ exports.populateSet = async (setName) => {
             body: JSON.stringify(data)
         }, async (error, response, body) => {
             if (error) console.log('error getting cards for set', setName, ':', error);
-            const cardsResult = JSON.parse(body);
-            const cards = cardsResult.results;
-            const totalItems = cardsResult.totalItems; 
-            try {
-                const setQuery = await Sets.findOne({name : setName}).exec();
-
-                if (!setQuery.count || setQuery.count < totalItems) {
-                    setQuery.set({cardIds: cards,
-                                  count: totalItems});
-                    setQuery.save((err) => {
-                        if (err) console.log(err);
-                    });
-                }
-            } catch (error) {
-                console.log(error);
-            }
+            return JSON.parse(body);
         })
     });   
+}
+
+exports.populateSetCards = async (cardsResult, setName) => {
+    const cards = cardsResult.results;
+    const totalItems = cardsResult.totalItems; 
+
+    //add card details to cards collection
+    cards.forEach((card) => {
+        PopulateCard.addCard(card)
+    });
+    try {
+        const setQuery = await Sets.findOne({name : setName}).exec();
+
+        if (!setQuery.count || setQuery.count < totalItems) {
+            setQuery.set({cardIds: cards,
+                            count: totalItems});
+            setQuery.save((err) => {
+                if (err) console.log(err);
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }

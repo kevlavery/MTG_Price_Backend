@@ -18,8 +18,10 @@ var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
 var card = require('./routes/card');
 
+//DB Population Tools
 var populateSets = require('./utility/populateSets');
 var getCardDetails = require('./utility/populateCard');
+
 var app = express();
 
 // view engine setup
@@ -32,8 +34,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//populateSets.getSets();
-//getCardDetails.getCard(128640);
+populateSets.getSets();
+//getCardDetails.getCard(128646);
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
