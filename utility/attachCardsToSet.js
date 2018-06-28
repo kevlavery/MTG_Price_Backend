@@ -31,30 +31,37 @@ exports.getSet = async (setName) => ***REMOVED***
             body: JSON.stringify(data)
         ***REMOVED***, async (error, response, body) => ***REMOVED***
             if (error) console.log('error getting cards for set', setName, ':', error);
+            //console.log("REST response");
+            //console.log(JSON.parse(body));
             return JSON.parse(body);
         ***REMOVED***)
     ***REMOVED***);   
 ***REMOVED***
 
 exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
-    const cards = cardsResult.results;
-    const totalItems = cardsResult.totalItems; 
+    console.log("card results");
+    console.log(cardsResult);
+    if(cardsResult) ***REMOVED***
+        const cards = cardsResult.results;
+        const totalItems = cardsResult.totalItems; 
 
-    //add card details to cards collection
-    cards.forEach((card) => ***REMOVED***
-        PopulateCard.addCard(card)
-    ***REMOVED***);
-    try ***REMOVED***
-        const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
+        //add card details to cards collection
+        cards.forEach((card) => ***REMOVED***
+            PopulateCard.addCard(card)
+        ***REMOVED***);
 
-        if (!setQuery.count || setQuery.count < totalItems) ***REMOVED***
-            setQuery.set(***REMOVED***cardIds: cards,
-                            count: totalItems***REMOVED***);
-            setQuery.save((err) => ***REMOVED***
-                if (err) console.log(err);
-            ***REMOVED***);
+        try ***REMOVED***
+            const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
+    
+            if (!setQuery.count || setQuery.count < totalItems) ***REMOVED***
+                setQuery.set(***REMOVED***cardIds: cards,
+                                count: totalItems***REMOVED***);
+                setQuery.save((err) => ***REMOVED***
+                    if (err) console.log(err);
+                ***REMOVED***);
+            ***REMOVED***
+        ***REMOVED*** catch (error) ***REMOVED***
+            console.log(error);
         ***REMOVED***
-    ***REMOVED*** catch (error) ***REMOVED***
-        console.log(error);
     ***REMOVED***
 ***REMOVED***
