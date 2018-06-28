@@ -21,10 +21,11 @@ var card = require('./routes/card');
 //DB Population Tools
 var populateSets = require('./utility/populateSets');
 var getCardDetails = require('./utility/populateCard');
+var attachCardsToSet = require('./utility/attachCardsToSet');
 
 var app = express();
 
-// view engine setup
+//view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -34,7 +35,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-populateSets.getSets();
+attachCardsToSet.getSet("Eventide").then(result => {
+  attachCardsToSet.populateSetCards(result, "Eventide");
+}).catch(err => {
+  console.log("Error getting set: "+err);
+});
+
+//populateSets.getSets();
 //getCardDetails.getCard(128646);
 
 app.use('/', indexRouter);
@@ -50,18 +57,18 @@ process.on('SIGINT', function(){
   });
 });
 
-// catch 404 and forward to error handler
+//catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+//error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+  //set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  //render the error page
   res.status(err.status || 500);
   res.render('error');
 });

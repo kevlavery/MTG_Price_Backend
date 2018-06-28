@@ -31,30 +31,37 @@ exports.getSet = async (setName) => {
             body: JSON.stringify(data)
         }, async (error, response, body) => {
             if (error) console.log('error getting cards for set', setName, ':', error);
+            //console.log("REST response");
+            //console.log(JSON.parse(body));
             return JSON.parse(body);
         })
     });   
 }
 
 exports.populateSetCards = async (cardsResult, setName) => {
-    const cards = cardsResult.results;
-    const totalItems = cardsResult.totalItems; 
+    console.log("card results");
+    console.log(cardsResult);
+    if(cardsResult) {
+        const cards = cardsResult.results;
+        const totalItems = cardsResult.totalItems; 
 
-    //add card details to cards collection
-    cards.forEach((card) => {
-        PopulateCard.addCard(card)
-    });
-    try {
-        const setQuery = await Sets.findOne({name : setName}).exec();
+        //add card details to cards collection
+        cards.forEach((card) => {
+            PopulateCard.addCard(card)
+        });
 
-        if (!setQuery.count || setQuery.count < totalItems) {
-            setQuery.set({cardIds: cards,
-                            count: totalItems});
-            setQuery.save((err) => {
-                if (err) console.log(err);
-            });
+        try {
+            const setQuery = await Sets.findOne({name : setName}).exec();
+    
+            if (!setQuery.count || setQuery.count < totalItems) {
+                setQuery.set({cardIds: cards,
+                                count: totalItems});
+                setQuery.save((err) => {
+                    if (err) console.log(err);
+                });
+            }
+        } catch (error) {
+            console.log(error);
         }
-    } catch (error) {
-        console.log(error);
     }
 }
