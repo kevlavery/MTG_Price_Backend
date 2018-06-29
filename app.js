@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//attachCardsToSet.getAndPopulateSet("Eventide");
+attachCardsToSet.getAndPopulateSet("Urza's Saga");
 
 //populateSets.getSets();
 //getCardDetails.getCard(128646);

@@ -45,7 +45,6 @@ exports.populateSetCards = async (cardsResult, setName) => {
 
         try {
             const setQuery = await Sets.findOne({name : setName}).exec();
-    
             if (!setQuery.count || setQuery.count < totalItems) {
                 setQuery.set({cardIds: cards,
                                 count: totalItems});
