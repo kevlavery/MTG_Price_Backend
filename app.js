@@ -35,14 +35,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-attachCardsToSet.getAndPopulateSet("Eventide");
+//attachCardsToSet.getAndPopulateSet("Eventide");
 
 //populateSets.getSets();
 //getCardDetails.getCard(128646);
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
-app.use('/card/:id', card);
+app.use('/card', card);
 
 
 //close connection on quit

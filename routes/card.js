@@ -1,12 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var Card = require('../models/card');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
     cardId = req.params.id;
-    
-
-    res.status(200).send(users);
+    Card.findOne({"productId": cardId}).exec((err, card) => {
+        res.status(200).send(card);
+        if(err) {
+            console.log(err);
+        }
+    });
 });
 
 module.exports = router;
