@@ -1,9 +1,9 @@
-var request = require('request');
+var requestPromise = require('request-promise-native');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 var PopulateCard = require('./populateCard');
 
-exports.getSet = (setName, token) => ***REMOVED***
+exports.getSet = async (setName, token) => ***REMOVED***
     let bearer = token;
     const authorization = 'bearer ' + bearer;
     let data = ***REMOVED***
@@ -19,7 +19,7 @@ exports.getSet = (setName, token) => ***REMOVED***
             ***REMOVED***
         ]
     ***REMOVED***
-    request(***REMOVED***
+    return requestPromise(***REMOVED***
         url: "http://api.tcgplayer.com/catalog/categories/1/search",
         method: "POST",
         headers: ***REMOVED***
@@ -28,17 +28,12 @@ exports.getSet = (setName, token) => ***REMOVED***
             "Accept": "application/json"
         ***REMOVED***,
         body: JSON.stringify(data)
-    ***REMOVED***, (error, response, body) => ***REMOVED***
-        if (error) console.log('error getting cards for set', setName, ':', error);
-        //console.log("REST response");
-        //console.log(JSON.parse(body));
-        return JSON.parse(body);
-    ***REMOVED***)   
+    ***REMOVED***).then((setQuery) => ***REMOVED***
+        return JSON.parse(setQuery);
+    ***REMOVED***);   
 ***REMOVED***
 
 exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
-    console.log("card results");
-    console.log(cardsResult);
     if(cardsResult) ***REMOVED***
         const cards = cardsResult.results;
         const totalItems = cardsResult.totalItems; 
@@ -64,13 +59,8 @@ exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
     ***REMOVED***
 ***REMOVED***
 
-exports.getAndPopulateSet = (setName) => ***REMOVED***
-    TCGAuthentication.getToken()
-    .then((token) => ***REMOVED*** 
-        this.getSet(setName, token)
-    ***REMOVED***).then(result => ***REMOVED***
-        this.populateSetCards(result, setName);
-    ***REMOVED***).catch(err => ***REMOVED***
-        console.log("Error getting set: "+err);
-    ***REMOVED***);
+exports.getAndPopulateSet = async (setName) => ***REMOVED***
+    token = await TCGAuthentication.getToken();
+    result = await this.getSet(setName, token);
+    this.populateSetCards(result, setName);
 ***REMOVED***;
