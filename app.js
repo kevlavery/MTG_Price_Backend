@@ -35,11 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-attachCardsToSet.getSet("Eventide").then(result => {
-  attachCardsToSet.populateSetCards(result, "Eventide");
-}).catch(err => {
-  console.log("Error getting set: "+err);
-});
+attachCardsToSet.getAndPopulateSet("Eventide");
 
 //populateSets.getSets();
 //getCardDetails.getCard(128646);

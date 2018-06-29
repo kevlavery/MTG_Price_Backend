@@ -3,39 +3,37 @@ var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 var PopulateCard = require('./populateCard');
 
-exports.getSet = async (setName) => {
-    TCGAuthentication.getToken().then((token) => { 
-        let bearer = token;
-        const authorization = 'bearer ' + bearer;
-        let data = {
-            "offset": 0,
-            "limit":500,
-            "sort": "ProductName DES",
-            "filters": [
-                {
-                    "name": "SetName",
-                    "values": [
-                    setName
-                    ]
-                }
-            ]
-        }
-        request({
-            url: "http://api.tcgplayer.com/catalog/categories/1/search",
-            method: "POST",
-            headers: {
-                "Authorization": authorization,
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(data)
-        }, async (error, response, body) => {
-            if (error) console.log('error getting cards for set', setName, ':', error);
-            //console.log("REST response");
-            //console.log(JSON.parse(body));
-            return JSON.parse(body);
-        })
-    });   
+exports.getSet = (setName, token) => {
+    let bearer = token;
+    const authorization = 'bearer ' + bearer;
+    let data = {
+        "offset": 0,
+        "limit":500,
+        "sort": "ProductName DES",
+        "filters": [
+            {
+                "name": "SetName",
+                "values": [
+                setName
+                ]
+            }
+        ]
+    }
+    request({
+        url: "http://api.tcgplayer.com/catalog/categories/1/search",
+        method: "POST",
+        headers: {
+            "Authorization": authorization,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(data)
+    }, (error, response, body) => {
+        if (error) console.log('error getting cards for set', setName, ':', error);
+        //console.log("REST response");
+        //console.log(JSON.parse(body));
+        return JSON.parse(body);
+    })   
 }
 
 exports.populateSetCards = async (cardsResult, setName) => {
@@ -65,3 +63,14 @@ exports.populateSetCards = async (cardsResult, setName) => {
         }
     }
 }
+
+exports.getAndPopulateSet = (setName) => {
+    TCGAuthentication.getToken()
+    .then((token) => { 
+        this.getSet(setName, token)
+    }).then(result => {
+        this.populateSetCards(result, setName);
+    }).catch(err => {
+        console.log("Error getting set: "+err);
+    });
+};
