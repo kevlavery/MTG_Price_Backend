@@ -45,7 +45,6 @@ exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
 
         try ***REMOVED***
             const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
-    
             if (!setQuery.count || setQuery.count < totalItems) ***REMOVED***
                 setQuery.set(***REMOVED***cardIds: cards,
                                 count: totalItems***REMOVED***);

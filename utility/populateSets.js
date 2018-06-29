@@ -1,4 +1,4 @@
-var request = require('request');
+var requestPromise = require('request-promise-native');
 var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
 var AttachCards = require('./attachCardsToSet');
@@ -8,7 +8,7 @@ exports.getSets = async () => ***REMOVED***
         let bearer = token;
         const authorization = 'bearer ' + bearer;
 
-        request(***REMOVED***
+        return requestPromise(***REMOVED***
             url: "https://api.tcgplayer.com/catalog/categories/1/search/manifest", 
             method: "GET",
             headers: ***REMOVED***
@@ -16,7 +16,7 @@ exports.getSets = async () => ***REMOVED***
                 "Content-Type": "application/json",
                 "Accept": "application/json"  
             ***REMOVED***
-        ***REMOVED***, (error, response, body) => ***REMOVED***
+        ***REMOVED***).then(() => ***REMOVED***
             //get list of set names from response
             if(error) console.log('error getting list of cards:', error);
             return JSON.parse(body).results[0].filters[2].items;           

@@ -16,9 +16,9 @@ exports.addCard = async (cardId) => ***REMOVED***
             productId: cardId,
             name: cardDetail.results[0].productName,
             imageURL: cardDetail.results[0].image,
-            medPrice: cardPrice.results[1].midPrice,
-            lowPrice: cardPrice.results[1].lowPrice,
-            highPrice: cardPrice.results[1].highPrice
+            medPrice: cardPrice.results[0].midPrice,
+            lowPrice: cardPrice.results[0].lowPrice,
+            highPrice: cardPrice.results[0].highPrice
         ***REMOVED***;
         //updates object or creates new if none found
         searchedCard = Card.findOneAndUpdate(
