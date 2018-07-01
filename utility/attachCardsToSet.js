@@ -4,8 +4,7 @@ var Sets = require('../models/sets');
 var PopulateCard = require('./populateCard');
 
 exports.getSet = async (setName, token) => ***REMOVED***
-    let bearer = token;
-    const authorization = 'bearer ' + bearer;
+    const authorization = 'bearer ' + token;
     let data = ***REMOVED***
         "offset": 0,
         "limit":500,
@@ -30,7 +29,7 @@ exports.getSet = async (setName, token) => ***REMOVED***
         body: JSON.stringify(data)
     ***REMOVED***).then((setQuery) => ***REMOVED***
         return JSON.parse(setQuery);
-    ***REMOVED***);   
+    ***REMOVED***).catch((error) => console.log('error getting set ', setName, error));   
 ***REMOVED***
 
 exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
@@ -59,7 +58,7 @@ exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
 ***REMOVED***
 
 exports.getAndPopulateSet = async (setName) => ***REMOVED***
-    token = await TCGAuthentication.getToken();
-    result = await this.getSet(setName, token);
+    let token = await TCGAuthentication.getToken();
+    let result = await this.getSet(setName, token);
     this.populateSetCards(result, setName);
 ***REMOVED***;

@@ -26,7 +26,6 @@ exports.addCard = async (cardId) => ***REMOVED***
             newCard,
             ***REMOVED***upsert: true***REMOVED***
         ).exec()
-        .then((response) => ***REMOVED***console.log("response: "+response)***REMOVED***)
         .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);
             
     ***REMOVED***);   

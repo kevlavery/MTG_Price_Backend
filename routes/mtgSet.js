@@ -4,10 +4,10 @@ var mongoose = require('mongoose');
 var Sets = require('../models/sets');
 
 /* GET home page. */
-router.get('/', function(req, res, next) ***REMOVED***
-    Sets.find().exec((err, sets) => ***REMOVED***
-        let setNames = sets.map(set => set.name); 
-        res.status(200).send(setNames);
+router.get('/:name', function(req, res, next) ***REMOVED***
+    var name = req.params.name;
+    Sets.findOne(***REMOVED***"name": name***REMOVED***).exec((err, set) => ***REMOVED***
+        res.status(200).send(set);
         if(err) ***REMOVED***
             console.log(err);
         ***REMOVED***
