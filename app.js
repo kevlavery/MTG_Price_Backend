@@ -16,12 +16,14 @@ mongoose.connect(mongoUrl, function(err){
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
+var mtgSet  = require('./routes/mtgSet');
 var card = require('./routes/card');
 
 //DB Population Tools
 var populateSets = require('./utility/populateSets');
 var getCardDetails = require('./utility/populateCard');
 var attachCardsToSet = require('./utility/attachCardsToSet');
+var TCGAuthentication = require("./utility/token");
 
 var app = express();
 
@@ -35,14 +37,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-attachCardsToSet.getAndPopulateSet("Urza's Saga");
-
-//populateSets.getSets();
-//getCardDetails.getCard(128646);
+// TCGAuthentication.getToken().then(token => {
+//   populateSets.getSets(token).then((setsResponse) => 
+//     console.log(setsResponse)
+// )});
+populateSets.getAndAddSets();
+//attachCardsToSet.getAndPopulateSet("Tempest");
 
 app.use('/', indexRouter);
 app.use('/sets', sets);
 app.use('/card', card);
+app.use('/set', mtgSet);
 
 
 //close connection on quit

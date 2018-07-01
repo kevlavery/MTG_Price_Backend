@@ -26,7 +26,6 @@ exports.addCard = async (cardId) => {
             newCard,
             {upsert: true}
         ).exec()
-        .then((response) => {console.log("response: "+response)})
         .catch((error) => {console.log("error: "+error)});
             
     });   

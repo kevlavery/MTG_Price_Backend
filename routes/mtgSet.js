@@ -4,10 +4,10 @@ var mongoose = require('mongoose');
 var Sets = require('../models/sets');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    Sets.find().exec((err, sets) => {
-        let setNames = sets.map(set => set.name); 
-        res.status(200).send(setNames);
+router.get('/:name', function(req, res, next) {
+    var name = req.params.name;
+    Sets.findOne({"name": name}).exec((err, set) => {
+        res.status(200).send(set);
         if(err) {
             console.log(err);
         }
