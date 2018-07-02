@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var mongoose = require('mongoose');
 var mongoUrl = 'mongodb://localhost/MTG_Price';
@@ -26,6 +27,7 @@ var attachCardsToSet = require('./utility/attachCardsToSet');
 var TCGAuthentication = require("./utility/token");
 
 var app = express();
+app.use(cors());
 
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   populateSets.getSets(token).then((setsResponse) => 
 //     console.log(setsResponse)
 // )});
-populateSets.getAndAddSets();
+//populateSets.getAndAddSets();
 //attachCardsToSet.getAndPopulateSet("Tempest");
 
 app.use('/', indexRouter);
