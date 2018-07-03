@@ -4,8 +4,7 @@ var Card = require('../models/card');
 
 exports.addCard = async (cardId) => ***REMOVED***
     TCGAuthentication.getToken().then(async (token) => ***REMOVED*** 
-        let bearer = token;
-        const authorization = 'bearer ' + bearer;
+        const authorization = 'bearer ' + token;
         let cardQuery = await Promise.all([
             getCardDetail(authorization, cardId), 
             getCardPrice(authorization, cardId)
@@ -26,8 +25,10 @@ exports.addCard = async (cardId) => ***REMOVED***
             newCard,
             ***REMOVED***upsert: true***REMOVED***
         ).exec()
-        .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);
-            
+        .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);         
+    ***REMOVED***).catch((err) => ***REMOVED***
+        console.log(err);
+        return err;
     ***REMOVED***);   
 ***REMOVED***
 
