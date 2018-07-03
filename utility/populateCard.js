@@ -4,8 +4,7 @@ var Card = require('../models/card');
 
 exports.addCard = async (cardId) => {
     TCGAuthentication.getToken().then(async (token) => { 
-        let bearer = token;
-        const authorization = 'bearer ' + bearer;
+        const authorization = 'bearer ' + token;
         let cardQuery = await Promise.all([
             getCardDetail(authorization, cardId), 
             getCardPrice(authorization, cardId)
@@ -26,8 +25,10 @@ exports.addCard = async (cardId) => {
             newCard,
             {upsert: true}
         ).exec()
-        .catch((error) => {console.log("error: "+error)});
-            
+        .catch((error) => {console.log("error: "+error)});         
+    }).catch((err) => {
+        console.log(err);
+        return err;
     });   
 }
 
