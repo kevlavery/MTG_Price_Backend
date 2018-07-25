@@ -6,7 +6,7 @@ This project is a the Node.js/Express/MongoDB backend to the MTG_Price project w
 
 ### Installation
 
-#### Requires MongoDB installed on local machine with location set to the url parameter in /data/DatabaseConnection.json
+Requires MongoDB installed on local machine with location set to the url parameter in /data/DatabaseConnection.json
 ```
   $ npm install
 ```
