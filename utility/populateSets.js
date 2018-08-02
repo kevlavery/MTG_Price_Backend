@@ -21,7 +21,7 @@ exports.getSets = async (token) => ***REMOVED***
 ***REMOVED***
 
 exports.populateSets = async (setResult, token) => ***REMOVED***
-    setResult.forEach(async (set) => ***REMOVED***
+    await Promise.all(setResult.map(async (set) => ***REMOVED***
         try ***REMOVED***
             const setQuery = await Sets.findOne(***REMOVED***"name": set***REMOVED***).exec();
             //if set doesn't exist in db add it
@@ -34,20 +34,16 @@ exports.populateSets = async (setResult, token) => ***REMOVED***
                 ***REMOVED***);
             ***REMOVED***
             setDetails = await AttachCards.getSet(set, token);
-            AttachCards.populateSetCards(setDetails, set);
+            await AttachCards.populateSetCards(setDetails, set);
             console.log(set, ' added');
         ***REMOVED*** catch (error) ***REMOVED***
             console.log(error);
         ***REMOVED***
-    ***REMOVED***);
+    ***REMOVED***));
 ***REMOVED***
 
 exports.getAndAddSets = async () => ***REMOVED***
     let token = await TCGAuthentication.getToken();
     let setsResponse = await this.getSets(token);
-    this.populateSets(setsResponse, token);
+    await this.populateSets(setsResponse, token);
 ***REMOVED***
-
-
-
-  

@@ -19,8 +19,9 @@ exports.getToken = async () => ***REMOVED***
     ***REMOVED***
 ***REMOVED***
 
+//why two return statements here
 const getRESTToken = () => ***REMOVED***
-   return requestPromise(***REMOVED***
+    return requestPromise(***REMOVED***
         url: "http://api.tcgplayer.com/token", //look to see if they support HTTPS
         method: "POST",
         headers: ***REMOVED***
@@ -38,7 +39,6 @@ const getRESTToken = () => ***REMOVED***
         ***REMOVED***);
         return token;
     ***REMOVED***);
-    
 ***REMOVED***
 
 

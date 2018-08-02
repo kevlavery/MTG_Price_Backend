@@ -6,8 +6,8 @@ var logger = require('morgan');
 var cors = require('cors');
 
 var mongoose = require('mongoose');
-var mongoUrl = 'mongodb://localhost/MTG_Price';
-mongoose.connect(mongoUrl, function(err)***REMOVED***
+var databaseConnection = require('./data/DatabaseConnection.json');
+mongoose.connect(databaseConnection.url, function(err)***REMOVED***
   if (err) ***REMOVED***
     console.log("Error connecting to MongoDB");
     process.exit(1);
@@ -39,10 +39,6 @@ app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// TCGAuthentication.getToken().then(token => ***REMOVED***
-//   populateSets.getSets(token).then((setsResponse) => 
-//     console.log(setsResponse)
-// )***REMOVED***);
 //populateSets.getAndAddSets();
 //attachCardsToSet.getAndPopulateSet("Tempest");
 

@@ -38,9 +38,9 @@ exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
         const totalItems = cardsResult.totalItems; 
 
         //add card details to cards collection
-        cards.forEach((card) => ***REMOVED***
-            PopulateCard.addCard(card)
-        ***REMOVED***);
+        // cards.forEach((card) => ***REMOVED***
+        //     PopulateCard.addCard(card)
+        // ***REMOVED***);
 
         try ***REMOVED***
             const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
