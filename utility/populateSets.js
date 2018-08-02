@@ -21,7 +21,7 @@ exports.getSets = async (token) => {
 }
 
 exports.populateSets = async (setResult, token) => {
-    setResult.forEach(async (set) => {
+    await Promise.all(setResult.map(async (set) => {
         try {
             const setQuery = await Sets.findOne({"name": set}).exec();
             //if set doesn't exist in db add it
@@ -34,20 +34,16 @@ exports.populateSets = async (setResult, token) => {
                 });
             }
             setDetails = await AttachCards.getSet(set, token);
-            AttachCards.populateSetCards(setDetails, set);
+            await AttachCards.populateSetCards(setDetails, set);
             console.log(set, ' added');
         } catch (error) {
             console.log(error);
         }
-    });
+    }));
 }
 
 exports.getAndAddSets = async () => {
     let token = await TCGAuthentication.getToken();
     let setsResponse = await this.getSets(token);
-    this.populateSets(setsResponse, token);
+    await this.populateSets(setsResponse, token);
 }
-
-
-
-  

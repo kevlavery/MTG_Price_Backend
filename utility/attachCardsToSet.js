@@ -38,9 +38,9 @@ exports.populateSetCards = async (cardsResult, setName) => {
         const totalItems = cardsResult.totalItems; 
 
         //add card details to cards collection
-        cards.forEach((card) => {
-            PopulateCard.addCard(card)
-        });
+        // cards.forEach((card) => {
+        //     PopulateCard.addCard(card)
+        // });
 
         try {
             const setQuery = await Sets.findOne({name : setName}).exec();
