@@ -4,10 +4,9 @@
 
 This project is a the Node.js/Express/MongoDB backend to the MTG_Price project which displays Magic the Gathering card prices.  This will pull the TCG player data directly, store it in the DB, and serve it to the frontend REST API.
 
-#### Currently in early design stages.
-
 ### Installation
 
+Requires MongoDB installed with location set to the url parameter in /data/DatabaseConnection.json
 ```
   $ npm install
 ```
