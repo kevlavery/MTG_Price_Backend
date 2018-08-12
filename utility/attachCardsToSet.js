@@ -1,46 +1,23 @@
 var requestPromise = require('request-promise-native');
-var TCGAuthentication = require('./token');
 var Sets = require('../models/sets');
-var PopulateCard = require('./populateCard');
 
-exports.getSet = async (setName, token) => ***REMOVED***
-    const authorization = 'bearer ' + token;
-    let data = ***REMOVED***
-        "offset": 0,
-        "limit":500,
-        "sort": "ProductName DES",
-        "filters": [
-            ***REMOVED***
-                "name": "SetName",
-                "values": [
-                setName
-                ]
-            ***REMOVED***
-        ]
-    ***REMOVED***
+exports.getSet = async (setURI) => ***REMOVED***
     return requestPromise(***REMOVED***
-        url: "http://api.tcgplayer.com/catalog/categories/1/search",
-        method: "POST",
+        url: setURI,
+        method: "GET",
         headers: ***REMOVED***
-            "Authorization": authorization,
             "Content-Type": "application/json",
             "Accept": "application/json"
-        ***REMOVED***,
-        body: JSON.stringify(data)
-    ***REMOVED***).then((setQuery) => ***REMOVED***
+        ***REMOVED***    
+    ***REMOVED***).then(setQuery => ***REMOVED***
         return JSON.parse(setQuery);
-    ***REMOVED***).catch((error) => console.log('error getting set ', setName, error));   
+    ***REMOVED***).catch((error) => console.log('error getting set ', setURI, error));   
 ***REMOVED***
 
 exports.populateSetCards = async (cardsResult, setName) => ***REMOVED***
     if(cardsResult) ***REMOVED***
         const cards = cardsResult.results;
         const totalItems = cardsResult.totalItems; 
-
-        //add card details to cards collection
-        // cards.forEach((card) => ***REMOVED***
-        //     PopulateCard.addCard(card)
-        // ***REMOVED***);
 
         try ***REMOVED***
             const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();

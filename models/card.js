@@ -2,12 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var cardSchema = new Schema(***REMOVED***
-  productId: Number,
+  scryfallId: Number,
   name: String,
   imageURL: String,
-  medPrice: Number,
-  lowPrice: Number,
-  highPrice: Number
+  price: Number
 ***REMOVED***);
 
 module.exports = mongoose.model('cards', cardSchema);
