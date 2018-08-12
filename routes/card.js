@@ -6,7 +6,7 @@ var Card = require('../models/card');
 /* GET home page. */
 router.get('/:id', (req, res, next) => {
     let cardId = req.params.id;
-    Card.findOne({"productId": cardId}).exec(async (err, card) => {
+    Card.findOne({"collectorId": cardId}).exec(async (err, card) => {
         if(err) {
             console.log(err);
             res.status(500).send(err);

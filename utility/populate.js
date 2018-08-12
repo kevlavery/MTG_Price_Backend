@@ -10,4 +10,6 @@ mongoose.connect(databaseConnection.url, function(err){
 
 //Populate sets collection and close DB when done
 var populateSets = require('./populateSets');
-populateSets.getAndAddSets().then(() => mongoose.disconnect());
+populateSets.getSets()
+.then(sets => populateSets.populateSets(sets)
+.then(() => mongoose.disconnect()));
