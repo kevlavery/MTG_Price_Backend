@@ -1,6 +1,5 @@
 var requestPromise = require('request-promise-native');
 var Sets = require('../models/sets');
-var AttachCards = require('./attachCardsToSet');
 
 exports.getSets = async () => {
     return requestPromise({
@@ -32,10 +31,21 @@ exports.populateSets = async (setResult) => {
                 });
                 await sleep(1);
                 console.log(set.name, ' added');
+            } else if (setQuery.count != set.card_count) {
+                console.log("updating ", set.name);
+                let newSet = {
+                    name: set.name,
+                    count: set.card_count,
+                    searchURI: set.search_uri
+                };
+                Sets.findOneAndUpdate(
+                    {"name": set.name},
+                    newSet,
+                    {upsert: true}
+                ).exec()
+                .catch((error) => {console.log("error: "+error)});
+
             }
-            //setDetails = await AttachCards.getSet(set.search_uri);
-            //console.log(setDetails);
-            //await AttachCards.populateSetCards(setDetails, set);
         } catch (error) {
             console.log(error);
         }
@@ -44,4 +54,4 @@ exports.populateSets = async (setResult) => {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}

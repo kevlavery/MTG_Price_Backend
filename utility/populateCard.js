@@ -1,57 +1,35 @@
-var requestPromise = require('request-promise-native');
-var TCGAuthentication = require('./token');
 var Card = require('../models/card');
 
-exports.addCard = async (cardId) => {
-    TCGAuthentication.getToken().then(async (token) => { 
-        const authorization = 'bearer ' + token;
-        let cardQuery = await Promise.all([
-            getCardDetail(authorization, cardId), 
-            getCardPrice(authorization, cardId)
-        ])
-        const cardDetail = JSON.parse(cardQuery[0]);
-        const cardPrice = JSON.parse(cardQuery[1]);       
-        let newCard = {
-            productId: cardId,
-            name: cardDetail.results[0].productName,
-            imageURL: cardDetail.results[0].image,
-            medPrice: cardPrice.results[0].midPrice,
-            lowPrice: cardPrice.results[0].lowPrice,
-            highPrice: cardPrice.results[0].highPrice
-        };
-        //updates object or creates new if none found
-        searchedCard = Card.findOneAndUpdate(
-            {productId: cardId},
-            newCard,
-            {upsert: true}
-        ).exec()
-        .catch((error) => {console.log("error: "+error)});         
-    }).catch((err) => {
-        console.log(err);
-        return err;
-    });   
-}
-
-const getCardPrice = async (authorization, cardId) => {
+const getCard = async (cardID) => {
     return requestPromise({
-        url: "http://api.tcgplayer.com/pricing/product/"+cardId,
+        url: 'https://api.scryfall.com/cards/' + cardID,
         method: "GET",
         headers: {
-            "Authorization": authorization,
             "Content-Type": "application/json",
             "Accept": "application/json"
-        }
-    })
+        }    
+    }).then(cardData => {
+        return JSON.parse(cardData);
+    }).catch((error) => console.log('error getting card with Scryfall ID ', cardID, error));   
 }
 
-const getCardDetail = async (authorization, cardId) => {
-    return requestPromise({
-        url: "http://api.tcgplayer.com/catalog/products/"+cardId,
-        method: "GET",
-        headers: {
-            "Authorization": authorization,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
-    })
+exports.addCard = async (card) => {
+    let newCard = {
+        scryfallId: card.id,
+        name: card.name,
+        imageURL: card.image_uris.normal,
+        price: card.usd
+    };
+    //updates object or creates new if none found
+    Card.findOneAndUpdate(
+        {scryfallId: card.id},
+        newCard,
+        {upsert: true}
+    ).exec()
+    .catch((error) => {console.log("error: "+error)});
 }
+
+exports.getAndPopulateCard = async (cardID) => {
+    let cardData = await getCard(cardURI);
+    await addCard(cardData);
+};

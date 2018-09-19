@@ -2,7 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var setsSchema = new Schema({
-  name: String,
+  name: { 
+          type: String,  
+          unique: true
+        },
   count: Number,
   searchURI: String,
   cardIds: [String]
