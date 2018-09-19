@@ -19,6 +19,7 @@ const populateSetCards = async (cardsResult, setName) => ***REMOVED***
     if (cardsResult) ***REMOVED***
         const cards = cardsResult.data;
         const setQuery = await Sets.findOne(***REMOVED***name : setName***REMOVED***).exec();
+        console.log(`Getting cards from $***REMOVED***setName***REMOVED***`);
         
         try ***REMOVED***
             await Promise.all(cards.map(async (card) => ***REMOVED***
@@ -55,10 +56,7 @@ exports.getAndPopulateSet = async (setURI, setName) => ***REMOVED***
 exports.populateAllSets = async (sets) => ***REMOVED***
     await Promise.all(sets.map(async (set) => ***REMOVED***
         if(set && set.count != set.cardIds.length) ***REMOVED***
-            console.log(set.name + " has cards to add");
             await this.getAndPopulateSet(set.searchURI, set.name);
-        ***REMOVED***else ***REMOVED***
-            //console.log(set.name + " has no cards to add");
         ***REMOVED***
     ***REMOVED***));
 ***REMOVED***

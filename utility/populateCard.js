@@ -14,10 +14,15 @@ const getCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
+    cardImage = null;
+    if (card.image_uris) ***REMOVED***
+        cardImage = card.image_uris.normal;
+    ***REMOVED***
+
     let newCard = ***REMOVED***
         scryfallId: card.id,
         name: card.name,
-        imageURL: card.image_uris.normal,
+        imageURL: cardImage,
         price: card.usd
     ***REMOVED***;
     //updates object or creates new if none found
