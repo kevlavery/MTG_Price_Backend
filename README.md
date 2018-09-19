@@ -13,10 +13,12 @@ Install the dependant node modules:
   $ npm install
 ```
 
-Populate the DB with the base MTG set data with with the following command (requires internet connection):
+Populate the DB with the base MTG set data with with the following commands (requires internet connection):
 ```
   $ npm run populate
+  $ npm run populateCards
 ```
+The first fetches data of all the MTG sets and the second gets all of card data.
 
 ### Development Build and Run
 
