@@ -19,6 +19,7 @@ const populateSetCards = async (cardsResult, setName) => {
     if (cardsResult) {
         const cards = cardsResult.data;
         const setQuery = await Sets.findOne({name : setName}).exec();
+        console.log(`Getting cards from ${setName}`);
         
         try {
             await Promise.all(cards.map(async (card) => {
@@ -55,10 +56,7 @@ exports.getAndPopulateSet = async (setURI, setName) => {
 exports.populateAllSets = async (sets) => {
     await Promise.all(sets.map(async (set) => {
         if(set && set.count != set.cardIds.length) {
-            console.log(set.name + " has cards to add");
             await this.getAndPopulateSet(set.searchURI, set.name);
-        }else {
-            //console.log(set.name + " has no cards to add");
         }
     }));
 }
