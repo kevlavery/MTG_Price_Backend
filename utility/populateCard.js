@@ -1,57 +1,35 @@
-var requestPromise = require('request-promise-native');
-var TCGAuthentication = require('./token');
 var Card = require('../models/card');
 
-exports.addCard = async (cardId) => ***REMOVED***
-    TCGAuthentication.getToken().then(async (token) => ***REMOVED*** 
-        const authorization = 'bearer ' + token;
-        let cardQuery = await Promise.all([
-            getCardDetail(authorization, cardId), 
-            getCardPrice(authorization, cardId)
-        ])
-        const cardDetail = JSON.parse(cardQuery[0]);
-        const cardPrice = JSON.parse(cardQuery[1]);       
-        let newCard = ***REMOVED***
-            productId: cardId,
-            name: cardDetail.results[0].productName,
-            imageURL: cardDetail.results[0].image,
-            medPrice: cardPrice.results[0].midPrice,
-            lowPrice: cardPrice.results[0].lowPrice,
-            highPrice: cardPrice.results[0].highPrice
-        ***REMOVED***;
-        //updates object or creates new if none found
-        searchedCard = Card.findOneAndUpdate(
-            ***REMOVED***productId: cardId***REMOVED***,
-            newCard,
-            ***REMOVED***upsert: true***REMOVED***
-        ).exec()
-        .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);         
-    ***REMOVED***).catch((err) => ***REMOVED***
-        console.log(err);
-        return err;
-    ***REMOVED***);   
-***REMOVED***
-
-const getCardPrice = async (authorization, cardId) => ***REMOVED***
+const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
-        url: "http://api.tcgplayer.com/pricing/product/"+cardId,
+        url: 'https://api.scryfall.com/cards/' + cardID,
         method: "GET",
         headers: ***REMOVED***
-            "Authorization": authorization,
             "Content-Type": "application/json",
             "Accept": "application/json"
-        ***REMOVED***
-    ***REMOVED***)
+        ***REMOVED***    
+    ***REMOVED***).then(cardData => ***REMOVED***
+        return JSON.parse(cardData);
+    ***REMOVED***).catch((error) => console.log('error getting card with Scryfall ID ', cardID, error));   
 ***REMOVED***
 
-const getCardDetail = async (authorization, cardId) => ***REMOVED***
-    return requestPromise(***REMOVED***
-        url: "http://api.tcgplayer.com/catalog/products/"+cardId,
-        method: "GET",
-        headers: ***REMOVED***
-            "Authorization": authorization,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        ***REMOVED***
-    ***REMOVED***)
+exports.addCard = async (card) => ***REMOVED***
+    let newCard = ***REMOVED***
+        scryfallId: card.id,
+        name: card.name,
+        imageURL: card.image_uris.normal,
+        price: card.usd
+    ***REMOVED***;
+    //updates object or creates new if none found
+    Card.findOneAndUpdate(
+        ***REMOVED***scryfallId: card.id***REMOVED***,
+        newCard,
+        ***REMOVED***upsert: true***REMOVED***
+    ).exec()
+    .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);
 ***REMOVED***
+
+exports.getAndPopulateCard = async (cardID) => ***REMOVED***
+    let cardData = await getCard(cardURI);
+    await addCard(cardData);
+***REMOVED***;

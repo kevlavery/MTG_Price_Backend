@@ -1,6 +1,5 @@
 var requestPromise = require('request-promise-native');
 var Sets = require('../models/sets');
-var AttachCards = require('./attachCardsToSet');
 
 exports.getSets = async () => ***REMOVED***
     return requestPromise(***REMOVED***
@@ -32,10 +31,21 @@ exports.populateSets = async (setResult) => ***REMOVED***
                 ***REMOVED***);
                 await sleep(1);
                 console.log(set.name, ' added');
+            ***REMOVED*** else if (setQuery.count != set.card_count) ***REMOVED***
+                console.log("updating ", set.name);
+                let newSet = ***REMOVED***
+                    name: set.name,
+                    count: set.card_count,
+                    searchURI: set.search_uri
+                ***REMOVED***;
+                Sets.findOneAndUpdate(
+                    ***REMOVED***"name": set.name***REMOVED***,
+                    newSet,
+                    ***REMOVED***upsert: true***REMOVED***
+                ).exec()
+                .catch((error) => ***REMOVED***console.log("error: "+error)***REMOVED***);
+
             ***REMOVED***
-            //setDetails = await AttachCards.getSet(set.search_uri);
-            //console.log(setDetails);
-            //await AttachCards.populateSetCards(setDetails, set);
         ***REMOVED*** catch (error) ***REMOVED***
             console.log(error);
         ***REMOVED***
@@ -44,4 +54,4 @@ exports.populateSets = async (setResult) => ***REMOVED***
 
 function sleep(ms) ***REMOVED***
     return new Promise(resolve => setTimeout(resolve, ms));
-  ***REMOVED***
+***REMOVED***
