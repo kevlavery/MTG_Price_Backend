@@ -14,17 +14,38 @@ const getCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
-    cardImage = null;
-    if (card.image_uris) ***REMOVED***
-        cardImage = card.image_uris.normal;
-    ***REMOVED***
+    // cardImage = null;
+    // if (card.image_uris) ***REMOVED***
+    //     cardImage = card.image_uris.normal;
+    // ***REMOVED***
 
     let newCard = ***REMOVED***
         scryfallId: card.id,
         name: card.name,
-        imageURL: cardImage,
-        price: card.usd
+        price: card.usd,
+        cmc: card.cmc,
+        scryfallLink: scryfall_uri
     ***REMOVED***;
+
+    //add oracle text and name 
+    if (card.layout == "flip" || card.layout == "split" || card.layout == "transform") ***REMOVED***
+        newCard.faces.front.name = card.card_faces[0].name;
+        newCard.oracle = card.card_faces[0].oracle_text;
+
+        newCard.faces.back.name = card.card_faces[1].name;
+        newCard.faces.back.oracle = card.card_faces[1].oracle_text;
+    ***REMOVED*** else ***REMOVED***
+        newCard.oracle = card.oracle_text;
+    ***REMOVED***
+
+    //add image or both if transform card
+    if (card.layout == "transform") ***REMOVED***
+        newCard.imageURL = card.card_faces[0].image_uris.normal;
+        newCard.faces.back.imageURL = card.card_faces[1].image_uris.normal;;
+    ***REMOVED*** else ***REMOVED***
+        newCard.imageURL = card.image_uris.normal;
+    ***REMOVED***
+
     //updates object or creates new if none found
     Card.findOneAndUpdate(
         ***REMOVED***scryfallId: card.id***REMOVED***,
