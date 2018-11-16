@@ -9,7 +9,20 @@ var cardSchema = new Schema(
                 },
     name: String,
     imageURL: String,
-    price: Number
+    price: Number,
+    oracle: String,
+    cmc: Number,
+    scryfallLink: String,
+    faces: {
+      front: {
+        name: String
+      },
+      back: {
+        name: String,
+        imageURL: String,
+        oracle: String
+      } 
+    }
   }
 );
 
