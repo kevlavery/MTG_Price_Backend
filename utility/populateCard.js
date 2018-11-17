@@ -14,32 +14,39 @@ const getCard = async (cardID) => {
 }
 
 exports.addCard = async (card) => {
-    // cardImage = null;
-    // if (card.image_uris) {
-    //     cardImage = card.image_uris.normal;
-    // }
+    cardImage = null;
+    if (card.image_uris) {
+        cardImage = card.image_uris.normal;
+    }
 
     let newCard = {
         scryfallId: card.id,
         name: card.name,
         price: card.usd,
         cmc: card.cmc,
-        scryfallLink: scryfall_uri
+        scryfallLink: card.scryfall_uri
     };
 
     //add oracle text and name 
-    if (card.layout == "flip" || card.layout == "split" || card.layout == "transform") {
-        newCard.faces.front.name = card.card_faces[0].name;
+    if (card.layout == "flip" || card.layout == "split" || card.layout == "transform" || card.layout == "double_faced_token") {
+        faces = {
+            front: {
+                name: card.card_faces[0].name
+            },
+            back: {
+                name: card.card_faces[1].name,
+                oracle: card.card_faces[1].oracle_text
+            }
+        }
+        
         newCard.oracle = card.card_faces[0].oracle_text;
-
-        newCard.faces.back.name = card.card_faces[1].name;
-        newCard.faces.back.oracle = card.card_faces[1].oracle_text;
+        newCard.faces = faces;
     } else {
         newCard.oracle = card.oracle_text;
     }
 
     //add image or both if transform card
-    if (card.layout == "transform") {
+    if (card.layout == "transform" || card.layout == "double_faced_token") {
         newCard.imageURL = card.card_faces[0].image_uris.normal;
         newCard.faces.back.imageURL = card.card_faces[1].image_uris.normal;;
     } else {
@@ -52,7 +59,9 @@ exports.addCard = async (card) => {
         newCard,
         {upsert: true}
     ).exec()
-    .catch((error) => {console.log("error: "+error)});
+    .catch((error) => {
+        console.log("error: "+error);
+    });
 }
 
 exports.getAndPopulateCard = async (cardID) => {

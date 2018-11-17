@@ -23,11 +23,17 @@ const populateSetCards = async (cardsResult, setName) => {
         
         try {
             await Promise.all(cards.map(async (card) => {
+                await populateCard.addCard(card)
+                      .catch((error) => {
+                          console.log(card.id + " not added");
+                          console.log(error);
+                      });
                 await setQuery.updateOne({$addToSet: {cardIds: card.id}});
-                populateCard.addCard(card);
                 await sleep(1);
-                //console.log(card.id + " added");
-            }));
+                
+            })).catch((error) => {
+                console.log(error);
+            });
             await setQuery.save((err) => {
                 if (err) console.log(err);
             });
@@ -54,6 +60,7 @@ exports.getAndPopulateSet = async (setURI, setName) => {
 };
 
 exports.populateAllSets = async (sets) => {
+    console.log("populating sets")
     await Promise.all(sets.map(async (set) => {
         if(set && set.count != set.cardIds.length) {
             await this.getAndPopulateSet(set.searchURI, set.name);

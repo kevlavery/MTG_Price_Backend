@@ -10,7 +10,7 @@ mongoose.connect(databaseConnection.url, function(err){
 });
 mongoose.set('useCreateIndex', true);
 //still shows error
-mongoose.set('useNewUrlParser', true);
+//mongoose.set('useNewUrlParser', true);
 
 
 var attachCards = require('./attachCardsToSet');

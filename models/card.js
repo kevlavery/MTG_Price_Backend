@@ -21,7 +21,7 @@ var cardSchema = new Schema(
         name: String,
         imageURL: String,
         oracle: String
-      } 
+      }
     }
   }
 );
