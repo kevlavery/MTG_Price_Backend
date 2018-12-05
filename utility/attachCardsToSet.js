@@ -25,15 +25,16 @@ const populateSetCards = async (cardsResult, setName) => {
             await Promise.all(cards.map(async (card) => {
                 await populateCard.addCard(card)
                       .catch((error) => {
-                          console.log(card.id + " not added");
+                          console.log(card.id + " not added to cards DB");
                           console.log(error);
                       });
-                await setQuery.updateOne({$addToSet: {cardIds: card.id}});
+                await setQuery.updateOne({$addToSet: {cardIds: card.id}})
+                      .catch((error) => {
+                          console.log(card.id + " not added to sets DB");
+                          console.log(error);
+                      });
                 await sleep(1);
-                
-            })).catch((error) => {
-                console.log(error);
-            });
+            }));
             await setQuery.save((err) => {
                 if (err) console.log(err);
             });

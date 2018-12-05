@@ -18,7 +18,8 @@ Sets.find({}, function addCards(err, sets) {
     if(err) {
         console.log(err);
     }
-    attachCards.populateAllSets(sets).then(() => {
+    attachCards.populateAllSets(sets)
+    .then(() => {
         mongoose.disconnect();
     });
 });
