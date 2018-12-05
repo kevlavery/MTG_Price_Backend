@@ -25,15 +25,16 @@ const populateSetCards = async (cardsResult, setName) => ***REMOVED***
             await Promise.all(cards.map(async (card) => ***REMOVED***
                 await populateCard.addCard(card)
                       .catch((error) => ***REMOVED***
-                          console.log(card.id + " not added");
+                          console.log(card.id + " not added to cards DB");
                           console.log(error);
                       ***REMOVED***);
-                await setQuery.updateOne(***REMOVED***$addToSet: ***REMOVED***cardIds: card.id***REMOVED******REMOVED***);
+                await setQuery.updateOne(***REMOVED***$addToSet: ***REMOVED***cardIds: card.id***REMOVED******REMOVED***)
+                      .catch((error) => ***REMOVED***
+                          console.log(card.id + " not added to sets DB");
+                          console.log(error);
+                      ***REMOVED***);
                 await sleep(1);
-                
-            ***REMOVED***)).catch((error) => ***REMOVED***
-                console.log(error);
-            ***REMOVED***);
+            ***REMOVED***));
             await setQuery.save((err) => ***REMOVED***
                 if (err) console.log(err);
             ***REMOVED***);

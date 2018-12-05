@@ -9,7 +9,10 @@ var cardSchema = new Schema(
                 ***REMOVED***,
     name: String,
     imageURL: String,
-    price: Number,
+    price: [***REMOVED***
+      date: ***REMOVED*** type: Date, default: Date.now ***REMOVED***,
+      value: Number
+    ***REMOVED***],
     oracle: String,
     cmc: Number,
     scryfallLink: String,

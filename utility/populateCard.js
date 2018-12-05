@@ -1,14 +1,16 @@
+//var limit = require("simple-rate-limiter");
+//var requestPromise = limit(require('request-promise-native')).to(10).per(1000);
 var Card = require('../models/card');
+var requestPromise = require('request-promise-native');
 
 const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
         url: 'https://api.scryfall.com/cards/' + cardID,
         method: "GET",
         headers: ***REMOVED***
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            "Content-Type": "application/json"
         ***REMOVED***    
-    ***REMOVED***).then(cardData => ***REMOVED***
+    ***REMOVED***).then((cardData) => ***REMOVED***
         return JSON.parse(cardData);
     ***REMOVED***).catch((error) => console.log('error getting card with Scryfall ID ', cardID, error));   
 ***REMOVED***
@@ -22,7 +24,7 @@ exports.addCard = async (card) => ***REMOVED***
     let newCard = ***REMOVED***
         scryfallId: card.id,
         name: card.name,
-        price: card.usd,
+        price: [***REMOVED***value: card.usd***REMOVED***],
         cmc: card.cmc,
         scryfallLink: card.scryfall_uri
     ***REMOVED***;
@@ -60,11 +62,34 @@ exports.addCard = async (card) => ***REMOVED***
         ***REMOVED***upsert: true***REMOVED***
     ).exec()
     .catch((error) => ***REMOVED***
-        console.log("error: "+error);
+        console.log("error: " + error);
     ***REMOVED***);
 ***REMOVED***
 
 exports.getAndPopulateCard = async (cardID) => ***REMOVED***
     let cardData = await getCard(cardURI);
     await addCard(cardData);
-***REMOVED***;
+***REMOVED***
+
+exports.updateCardPrice = async (cards) => ***REMOVED***
+    await Promise.all(cards.map(async (card) => ***REMOVED***
+        try ***REMOVED***
+            let updatedCard = await getCard(card.scryfallId);
+            await sleep(1000);
+            console.log(updatedCard.name, "added");
+            await Card.updateOne(
+                ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
+            )
+            .catch((error) => ***REMOVED***
+                console.log("error: " + error);
+            ***REMOVED***);
+        ***REMOVED*** catch (error) ***REMOVED***
+            console.log(error);
+        ***REMOVED***
+    ***REMOVED***));
+***REMOVED***
+
+function sleep(ms) ***REMOVED***
+    return new Promise(resolve => setTimeout(resolve, ms));
+***REMOVED***

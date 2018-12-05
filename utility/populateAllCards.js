@@ -18,7 +18,8 @@ Sets.find(***REMOVED******REMOVED***, function addCards(err, sets) ***REMOVED***
     if(err) ***REMOVED***
         console.log(err);
     ***REMOVED***
-    attachCards.populateAllSets(sets).then(() => ***REMOVED***
+    attachCards.populateAllSets(sets)
+    .then(() => ***REMOVED***
         mongoose.disconnect();
     ***REMOVED***);
 ***REMOVED***);
