@@ -1,7 +1,8 @@
-//var limit = require("simple-rate-limiter");
-//var requestPromise = limit(require('request-promise-native')).to(10).per(1000);
-var Card = require('../models/card');
 var requestPromise = require('request-promise-native');
+var Card = require('../models/card');
+var promiseLimit = require('promise-limit')
+ 
+var limit = promiseLimit(10)
 
 const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
@@ -73,20 +74,22 @@ exports.getAndPopulateCard = async (cardID) => ***REMOVED***
 
 exports.updateCardPrice = async (cards) => ***REMOVED***
     await Promise.all(cards.map(async (card) => ***REMOVED***
-        try ***REMOVED***
-            let updatedCard = await getCard(card.scryfallId);
-            await sleep(1000);
-            console.log(updatedCard.name, "added");
-            await Card.updateOne(
-                ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
-                ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
-            )
-            .catch((error) => ***REMOVED***
-                console.log("error: " + error);
-            ***REMOVED***);
-        ***REMOVED*** catch (error) ***REMOVED***
-            console.log(error);
-        ***REMOVED***
+        return limit(async () => ***REMOVED***
+            try ***REMOVED***
+                let updatedCard = await getCard(card.scryfallId);
+                await sleep(100);
+                console.log(updatedCard.name, "added");
+                await Card.updateOne(
+                    ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                    ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
+                )
+                .catch((error) => ***REMOVED***
+                    console.log("error: " + error);
+                ***REMOVED***);
+            ***REMOVED*** catch (error) ***REMOVED***
+                console.log(error);
+            ***REMOVED***
+        ***REMOVED***)
     ***REMOVED***));
 ***REMOVED***
 

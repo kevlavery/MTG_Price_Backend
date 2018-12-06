@@ -11,7 +11,7 @@ mongoose.connect(databaseConnection.url, function(err)***REMOVED***
   ***REMOVED***);
 mongoose.set('useCreateIndex', true);
 
-Card.find(***REMOVED***cmc: 5***REMOVED*** , (err, cards) => ***REMOVED***
+Card.find(***REMOVED******REMOVED*** , (err, cards) => ***REMOVED***
     if(err) ***REMOVED***
         console.log(err);
     ***REMOVED***
@@ -20,12 +20,3 @@ Card.find(***REMOVED***cmc: 5***REMOVED*** , (err, cards) => ***REMOVED***
         mongoose.disconnect();
     ***REMOVED***);
 ***REMOVED***);
-
-// Card.find(***REMOVED***scryfallId: "17ac2bff-f570-4955-a8d4-7e12d616dd8b"***REMOVED*** , (err, card) => ***REMOVED***
-//     if(err) ***REMOVED***
-//         console.log(err);
-//     ***REMOVED***
-//     CardTools.updateCardPrice(card[0])
-// ***REMOVED***).then(() => ***REMOVED***
-//     mongoose.disconnect();
-// ***REMOVED***)
