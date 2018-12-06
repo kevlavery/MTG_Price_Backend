@@ -1,7 +1,8 @@
-//var limit = require("simple-rate-limiter");
-//var requestPromise = limit(require('request-promise-native')).to(10).per(1000);
-var Card = require('../models/card');
 var requestPromise = require('request-promise-native');
+var Card = require('../models/card');
+var promiseLimit = require('promise-limit')
+ 
+var limit = promiseLimit(10)
 
 const getCard = async (cardID) => {
     return requestPromise({
@@ -73,20 +74,22 @@ exports.getAndPopulateCard = async (cardID) => {
 
 exports.updateCardPrice = async (cards) => {
     await Promise.all(cards.map(async (card) => {
-        try {
-            let updatedCard = await getCard(card.scryfallId);
-            await sleep(1000);
-            console.log(updatedCard.name, "added");
-            await Card.updateOne(
-                {scryfallId: card.scryfallId},
-                {$push: {price: {value: updatedCard.usd}}}
-            )
-            .catch((error) => {
-                console.log("error: " + error);
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        return limit(async () => {
+            try {
+                let updatedCard = await getCard(card.scryfallId);
+                await sleep(100);
+                console.log(updatedCard.name, "added");
+                await Card.updateOne(
+                    {scryfallId: card.scryfallId},
+                    {$push: {price: {value: updatedCard.usd}}}
+                )
+                .catch((error) => {
+                    console.log("error: " + error);
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        })
     }));
 }
 

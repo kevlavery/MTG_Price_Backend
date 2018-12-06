@@ -11,7 +11,7 @@ mongoose.connect(databaseConnection.url, function(err){
   });
 mongoose.set('useCreateIndex', true);
 
-Card.find({cmc: 5} , (err, cards) => {
+Card.find({} , (err, cards) => {
     if(err) {
         console.log(err);
     }
@@ -20,12 +20,3 @@ Card.find({cmc: 5} , (err, cards) => {
         mongoose.disconnect();
     });
 });
-
-// Card.find({scryfallId: "17ac2bff-f570-4955-a8d4-7e12d616dd8b"} , (err, card) => {
-//     if(err) {
-//         console.log(err);
-//     }
-//     CardTools.updateCardPrice(card[0])
-// }).then(() => {
-//     mongoose.disconnect();
-// })

@@ -17,11 +17,11 @@
     "http-errors": "~1.6.2",
     "mongoose": "^5.2.13",
     "morgan": "^1.9.1",
+    "promise-limit": "^2.7.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "request-promise-native": "^1.0.5",
-    "run-func": "^1.0.2",
-    "simple-rate-limiter": "^0.2.3"
+    "run-func": "^1.0.2"
   },
   "main": "./bin/www",
   "devDependencies": {}
