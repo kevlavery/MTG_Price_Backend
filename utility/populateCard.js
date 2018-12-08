@@ -2,7 +2,7 @@ var requestPromise = require('request-promise-native');
 var Card = require('../models/card');
 var promiseLimit = require('promise-limit')
  
-var limit = promiseLimit(10)
+var limit = promiseLimit(20)
 
 const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
@@ -77,8 +77,7 @@ exports.updateCardPrice = async (cards) => ***REMOVED***
         return limit(async () => ***REMOVED***
             try ***REMOVED***
                 let updatedCard = await getCard(card.scryfallId);
-                await sleep(100);
-                console.log(updatedCard.name, "added");
+                console.log(updatedCard.name, "price updated");
                 await Card.updateOne(
                     ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
                     ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***

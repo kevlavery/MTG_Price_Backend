@@ -11,7 +11,7 @@ mongoose.connect(databaseConnection.url, function(err)***REMOVED***
   ***REMOVED***);
 mongoose.set('useCreateIndex', true);
 
-Card.find(***REMOVED******REMOVED*** , (err, cards) => ***REMOVED***
+Card.find(***REMOVED***cmc: 15***REMOVED*** , (err, cards) => ***REMOVED***
     if(err) ***REMOVED***
         console.log(err);
     ***REMOVED***
