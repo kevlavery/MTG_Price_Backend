@@ -1,3 +1,3 @@
 {
-    "url": "process.env.MONGODB_URI"
+    "url": "mongodb://spellSlinger:magicCards1995@ds229474.mlab.com:29474/heroku_f6zg4xx1"
 }
