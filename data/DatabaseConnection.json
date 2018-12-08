@@ -1,3 +1,3 @@
 {
-    "url": "mongodb://localhost/MTG_Price"
+    "url": "process.env.MONGODB_URI"
 }

@@ -11,7 +11,7 @@ mongoose.connect(databaseConnection.url, function(err){
   });
 mongoose.set('useCreateIndex', true);
 
-Card.find({} , (err, cards) => {
+Card.find({cmc: 15} , (err, cards) => {
     if(err) {
         console.log(err);
     }
