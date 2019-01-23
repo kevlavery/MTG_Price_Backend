@@ -13,10 +13,11 @@ const getCard = async (cardID) => ***REMOVED***
         ***REMOVED***    
     ***REMOVED***).then((cardData) => ***REMOVED***
         return JSON.parse(cardData);
-    ***REMOVED***).catch((error) => console.log('error getting card with Scryfall ID ', cardID, error));   
+    ***REMOVED***).catch((error) => console.log('error getting card with Scryfall ID', cardID));   
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
+
     cardImage = null;
     if (card.image_uris) ***REMOVED***
         cardImage = card.image_uris.normal;
@@ -73,23 +74,43 @@ exports.getAndPopulateCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.updateCardPrice = async (cards) => ***REMOVED***
-    await Promise.all(cards.map(async (card) => ***REMOVED***
-        return limit(async () => ***REMOVED***
-            try ***REMOVED***
-                let updatedCard = await getCard(card.scryfallId);
-                console.log(updatedCard.name, "price updated");
-                await Card.updateOne(
-                    ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
-                    ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
-                )
-                .catch((error) => ***REMOVED***
-                    console.log("error: " + error);
-                ***REMOVED***);
-            ***REMOVED*** catch (error) ***REMOVED***
-                console.log(error);
-            ***REMOVED***
-        ***REMOVED***)
-    ***REMOVED***));
+    let chunkSize = 100;
+    let subGroups = []
+    let groupSize = Math.ceil(cards.length/chunkSize)
+    for(var i = 0; i < groupSize; i++)***REMOVED***
+        subGroups.push(cards.splice(0, chunkSize))
+    ***REMOVED***
+    count = 0;
+
+    await asyncForEach(subGroups, async (cardGroup) => ***REMOVED***
+        Promise.all(cardGroup.map(async (card) => ***REMOVED***
+            return limit(async () => ***REMOVED***
+                try ***REMOVED***
+                    let updatedCard = await getCard(card.scryfallId);
+                    //console.log(updatedCard.set_name, updatedCard.name, "price updated");
+                    if (updatedCard) ***REMOVED***
+                        await Card.updateOne(
+                            ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                            ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
+                        )
+                        .catch((error) => ***REMOVED***
+                            console.log("error: " + error);
+                        ***REMOVED***);
+                    ***REMOVED***
+                ***REMOVED*** catch (error) ***REMOVED***
+                    console.log(error);
+                ***REMOVED***
+            ***REMOVED***)
+        ***REMOVED***));
+        count++;
+        console.log("group " + count + " done");
+    ***REMOVED***);
+***REMOVED***
+
+async function asyncForEach(array, callback) ***REMOVED***
+    for (let index = 0; index < array.length; index++) ***REMOVED***
+        await callback(array[index], index, array);
+    ***REMOVED***
 ***REMOVED***
 
 function sleep(ms) ***REMOVED***

@@ -13,7 +13,6 @@ router.get('/:id', (req, res, next) => ***REMOVED***
         ***REMOVED***
 
         if(card) ***REMOVED***
-            console.log(card);
             res.status(200).send(card);
         ***REMOVED*** else ***REMOVED***
             try ***REMOVED***
