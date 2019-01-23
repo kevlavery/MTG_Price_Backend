@@ -13,7 +13,6 @@ router.get('/:id', (req, res, next) => {
         }
 
         if(card) {
-            console.log(card);
             res.status(200).send(card);
         } else {
             try {

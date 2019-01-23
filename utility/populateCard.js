@@ -13,10 +13,11 @@ const getCard = async (cardID) => {
         }    
     }).then((cardData) => {
         return JSON.parse(cardData);
-    }).catch((error) => console.log('error getting card with Scryfall ID ', cardID, error));   
+    }).catch((error) => console.log('error getting card with Scryfall ID', cardID));   
 }
 
 exports.addCard = async (card) => {
+
     cardImage = null;
     if (card.image_uris) {
         cardImage = card.image_uris.normal;
@@ -73,23 +74,43 @@ exports.getAndPopulateCard = async (cardID) => {
 }
 
 exports.updateCardPrice = async (cards) => {
-    await Promise.all(cards.map(async (card) => {
-        return limit(async () => {
-            try {
-                let updatedCard = await getCard(card.scryfallId);
-                console.log(updatedCard.name, "price updated");
-                await Card.updateOne(
-                    {scryfallId: card.scryfallId},
-                    {$push: {price: {value: updatedCard.usd}}}
-                )
-                .catch((error) => {
-                    console.log("error: " + error);
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        })
-    }));
+    let chunkSize = 100;
+    let subGroups = []
+    let groupSize = Math.ceil(cards.length/chunkSize)
+    for(var i = 0; i < groupSize; i++){
+        subGroups.push(cards.splice(0, chunkSize))
+    }
+    count = 0;
+
+    await asyncForEach(subGroups, async (cardGroup) => {
+        Promise.all(cardGroup.map(async (card) => {
+            return limit(async () => {
+                try {
+                    let updatedCard = await getCard(card.scryfallId);
+                    //console.log(updatedCard.set_name, updatedCard.name, "price updated");
+                    if (updatedCard) {
+                        await Card.updateOne(
+                            {scryfallId: card.scryfallId},
+                            {$push: {price: {value: updatedCard.usd}}}
+                        )
+                        .catch((error) => {
+                            console.log("error: " + error);
+                        });
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+        }));
+        count++;
+        console.log("group " + count + " done");
+    });
+}
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
 }
 
 function sleep(ms) {
