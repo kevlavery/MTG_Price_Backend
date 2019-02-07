@@ -3,7 +3,7 @@ var router = express.Router();
 var Sets = require('../models/sets');
 var attachCards = require('../utility/attachCardsToSet');
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
     Sets.find().exec((err, sets) => {
         let setNames = sets.map(set => set.name); 
         res.status(200).send(setNames);
