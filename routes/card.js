@@ -3,7 +3,7 @@ var router = express.Router();
 var cardUtility = require('../utility/populateCard')
 var Card = require('../models/card');
 
-/* GET home page. */
+/* GET specified card based on URL parameter scryfallID. */
 router.get('/:id', (req, res, next) => ***REMOVED***
     let cardId = req.params.id;
     Card.findOne(***REMOVED***"scryfallId": cardId***REMOVED***).exec(async (err, card) => ***REMOVED***
@@ -23,6 +23,20 @@ router.get('/:id', (req, res, next) => ***REMOVED***
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***);
+***REMOVED***);
+
+/* POST query for card by name. */
+router.post('/', (req, res, next) => ***REMOVED***
+    let query = req.body.query;
+    console.log(query);
+    Card.find(***REMOVED***"name" : ***REMOVED***$regex : ".*"+query+".*"***REMOVED******REMOVED***).exec((err, results) => ***REMOVED***
+        if(err) ***REMOVED***
+            console.log(err);
+            res.status(500).send(err);
+        ***REMOVED*** else ***REMOVED***
+            res.status(200).send(results);
+        ***REMOVED***
+    ***REMOVED***)
 ***REMOVED***);
 
 module.exports = router;

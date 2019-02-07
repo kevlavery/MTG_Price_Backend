@@ -74,6 +74,7 @@ exports.getAndPopulateCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.updateCardPrice = async (cards) => ***REMOVED***
+    //break down to 100 card batches to reduce memory loads
     let chunkSize = 100;
     let subGroups = []
     let groupSize = Math.ceil(cards.length/chunkSize)
