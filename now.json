@@ -1,5 +1,4 @@
 {
     "version": 2,
-    "builds": [{ "src": "app.js", "use": "@now/node" }],
-    "builds": [{ "src": "/routes/*.js", "use": "@now/node" }]
+    "builds": [{ "src": "/bin/www", "use": "@now/node-server" }]
 }
