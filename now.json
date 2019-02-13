@@ -1,5 +1,4 @@
 ***REMOVED***
     "version": 2,
-    "builds": [***REMOVED*** "src": "app.js", "use": "@now/node" ***REMOVED***],
-    "builds": [***REMOVED*** "src": "/routes/*.js", "use": "@now/node" ***REMOVED***]
+    "builds": [***REMOVED*** "src": "/bin/www", "use": "@now/node-server" ***REMOVED***]
 ***REMOVED***
