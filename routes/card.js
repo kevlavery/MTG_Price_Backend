@@ -29,7 +29,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
     let query = req.body.query;
     console.log(query);
-    Card.find({"name" : {$regex : ".*"+query+".*"}}).exec((err, results) => {
+    Card.find({"name" : new RegExp(".*"+query+".*", "i")}).exec((err, results) => {
         if(err) {
             console.log(err);
             res.status(500).send(err);
