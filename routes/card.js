@@ -29,7 +29,7 @@ router.get('/:id', (req, res, next) => ***REMOVED***
 router.post('/', (req, res, next) => ***REMOVED***
     let query = req.body.query;
     console.log(query);
-    Card.find(***REMOVED***"name" : ***REMOVED***$regex : ".*"+query+".*"***REMOVED******REMOVED***).exec((err, results) => ***REMOVED***
+    Card.find(***REMOVED***"name" : new RegExp(".*"+query+".*", "i")***REMOVED***).exec((err, results) => ***REMOVED***
         if(err) ***REMOVED***
             console.log(err);
             res.status(500).send(err);
