@@ -25,7 +25,8 @@ var cardSchema = new Schema(
         imageURL: String,
         oracle: String
       ***REMOVED***
-    ***REMOVED***
+    ***REMOVED***,
+    set: String
   ***REMOVED***
 );
 

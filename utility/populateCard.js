@@ -28,7 +28,8 @@ exports.addCard = async (card) => ***REMOVED***
         name: card.name,
         price: [***REMOVED***value: card.usd***REMOVED***],
         cmc: card.cmc,
-        scryfallLink: card.scryfall_uri
+        scryfallLink: card.scryfall_uri,
+        set: card.set_name
     ***REMOVED***;
 
     //add oracle text and name 
