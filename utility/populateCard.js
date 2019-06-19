@@ -17,7 +17,6 @@ const getCard = async (cardID) => {
 }
 
 exports.addCard = async (card) => {
-
     cardImage = null;
     if (card.image_uris) {
         cardImage = card.image_uris.normal;
@@ -26,11 +25,16 @@ exports.addCard = async (card) => {
     let newCard = {
         scryfallId: card.id,
         name: card.name,
-        price: [{value: card.usd}],
         cmc: card.cmc,
         scryfallLink: card.scryfall_uri,
         set: card.set_name
     };
+
+    if (card.prices.usd !== null) {
+        newCard.price = [{value: card.prices.usd}];
+    } else if (card.prices.usd !== null) {
+        newCard.price = [{value: card.prices.usd_foil}];
+    }
 
     //add oracle text and name 
     if (card.layout == "flip" || card.layout == "split" || card.layout == "transform" || card.layout == "double_faced_token") {
@@ -65,7 +69,7 @@ exports.addCard = async (card) => {
         {upsert: true}
     ).exec()
     .catch((error) => {
-        console.log("error: " + error);
+        console.log("error: " + error + " with scryfall ID" + newCard.scryfallId);
     });
 }
 
@@ -89,14 +93,20 @@ exports.updateCardPrice = async (cards) => {
             return limit(async () => {
                 try {
                     let updatedCard = await getCard(card.scryfallId);
-                    //console.log(updatedCard.set_name, updatedCard.name, "price updated");
                     if (updatedCard) {
+                        let newPrice = null;
+                        if (updatedCard.prices.usd !== null) {
+                            newPrice = updatedCard.prices.usd;
+                        } else {
+                            newPrice = updatedCard.prices.usd_foil;
+                        }
+
                         await Card.updateOne(
                             {scryfallId: card.scryfallId},
-                            {$push: {price: {value: updatedCard.usd}}}
+                            {$push: {price: {value: newPrice}}}
                         )
                         .catch((error) => {
-                            console.log("error: " + error);
+                            console.log("error updating db" + error);
                         });
                     }
                 } catch (error) {
@@ -113,8 +123,4 @@ async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }

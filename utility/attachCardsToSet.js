@@ -49,14 +49,18 @@ exports.getAndPopulateSet = async (setURI, setName) => {
     let cardURI = setURI;
 
     //loop to get api data from sets with multiple pages
-    while(has_more) {
-        let result = await getSet(cardURI);
-        await populateSetCards(result, setName);
+    try {
+        while(has_more) {
+            let result = await getSet(cardURI);
+            await populateSetCards(result, setName);
 
-        has_more = result.has_more;
-        if(has_more) {
-            cardURI = result.next_page;
+            has_more = result.has_more;
+            if(has_more) {
+                cardURI = result.next_page;
+            }
         }
+    } catch (error) {
+        console.log(error)
     }
 };
 
