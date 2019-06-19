@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "$***REMOVED***workspaceFolder***REMOVED***/utility/updateCardPrices"
+            "program": "$***REMOVED***workspaceFolder***REMOVED***/utility/populateAllCards"
         ***REMOVED***
     ]
 ***REMOVED***

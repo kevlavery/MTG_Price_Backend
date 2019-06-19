@@ -17,7 +17,6 @@ const getCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
-
     cardImage = null;
     if (card.image_uris) ***REMOVED***
         cardImage = card.image_uris.normal;
@@ -26,11 +25,16 @@ exports.addCard = async (card) => ***REMOVED***
     let newCard = ***REMOVED***
         scryfallId: card.id,
         name: card.name,
-        price: [***REMOVED***value: card.usd***REMOVED***],
         cmc: card.cmc,
         scryfallLink: card.scryfall_uri,
         set: card.set_name
     ***REMOVED***;
+
+    if (card.prices.usd !== null) ***REMOVED***
+        newCard.price = [***REMOVED***value: card.prices.usd***REMOVED***];
+    ***REMOVED*** else if (card.prices.usd !== null) ***REMOVED***
+        newCard.price = [***REMOVED***value: card.prices.usd_foil***REMOVED***];
+    ***REMOVED***
 
     //add oracle text and name 
     if (card.layout == "flip" || card.layout == "split" || card.layout == "transform" || card.layout == "double_faced_token") ***REMOVED***
@@ -65,7 +69,7 @@ exports.addCard = async (card) => ***REMOVED***
         ***REMOVED***upsert: true***REMOVED***
     ).exec()
     .catch((error) => ***REMOVED***
-        console.log("error: " + error);
+        console.log("error: " + error + " with scryfall ID" + newCard.scryfallId);
     ***REMOVED***);
 ***REMOVED***
 
@@ -89,14 +93,20 @@ exports.updateCardPrice = async (cards) => ***REMOVED***
             return limit(async () => ***REMOVED***
                 try ***REMOVED***
                     let updatedCard = await getCard(card.scryfallId);
-                    //console.log(updatedCard.set_name, updatedCard.name, "price updated");
                     if (updatedCard) ***REMOVED***
+                        let newPrice = null;
+                        if (updatedCard.prices.usd !== null) ***REMOVED***
+                            newPrice = updatedCard.prices.usd;
+                        ***REMOVED*** else ***REMOVED***
+                            newPrice = updatedCard.prices.usd_foil;
+                        ***REMOVED***
+
                         await Card.updateOne(
                             ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
-                            ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: updatedCard.usd***REMOVED******REMOVED******REMOVED***
+                            ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: newPrice***REMOVED******REMOVED******REMOVED***
                         )
                         .catch((error) => ***REMOVED***
-                            console.log("error: " + error);
+                            console.log("error updating db" + error);
                         ***REMOVED***);
                     ***REMOVED***
                 ***REMOVED*** catch (error) ***REMOVED***
@@ -113,8 +123,4 @@ async function asyncForEach(array, callback) ***REMOVED***
     for (let index = 0; index < array.length; index++) ***REMOVED***
         await callback(array[index], index, array);
     ***REMOVED***
-***REMOVED***
-
-function sleep(ms) ***REMOVED***
-    return new Promise(resolve => setTimeout(resolve, ms));
 ***REMOVED***
