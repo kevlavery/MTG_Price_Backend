@@ -18,5 +18,6 @@ Card.find({} , (err, cards) => {
     CardTools.updateCardPrice(cards)
     .then(() => {
         mongoose.disconnect();
+        var t1 = performance.now();
     });
 });
