@@ -89,7 +89,7 @@ exports.updateCardPrice = async (cards) => ***REMOVED***
     count = 0;
 
     await asyncForEach(subGroups, async (cardGroup) => ***REMOVED***
-        Promise.all(cardGroup.map(async (card) => ***REMOVED***
+        await Promise.all(cardGroup.map(async (card) => ***REMOVED***
             return limit(async () => ***REMOVED***
                 try ***REMOVED***
                     let updatedCard = await getCard(card.scryfallId);
@@ -118,6 +118,7 @@ exports.updateCardPrice = async (cards) => ***REMOVED***
         console.log("group " + count + " done");
     ***REMOVED***);
 ***REMOVED***
+
 
 async function asyncForEach(array, callback) ***REMOVED***
     for (let index = 0; index < array.length; index++) ***REMOVED***
