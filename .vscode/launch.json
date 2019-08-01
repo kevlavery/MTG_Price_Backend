@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "$***REMOVED***workspaceFolder***REMOVED***/utility/populateAllCards"
+            "program": "$***REMOVED***workspaceFolder***REMOVED***/utility/uploadAllCards"
         ***REMOVED***
     ]
 ***REMOVED***

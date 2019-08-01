@@ -23,16 +23,18 @@ const populateSetCards = async (cardsResult, setName) => ***REMOVED***
         
         try ***REMOVED***
             await Promise.all(cards.map(async (card) => ***REMOVED***
+                //add card to cards collection
                 await populateCard.addCard(card)
-                      .catch((error) => ***REMOVED***
-                          console.log(card.id + " not added to cards DB");
-                          console.log(error);
-                      ***REMOVED***);
+                .catch((error) => ***REMOVED***
+                    console.log(card.id + " not added to cards DB");
+                    console.log(error);
+                ***REMOVED***);
+                //add card scryfall ID to specific MTG set
                 await setQuery.updateOne(***REMOVED***$addToSet: ***REMOVED***cardIds: card.id***REMOVED******REMOVED***)
-                      .catch((error) => ***REMOVED***
-                          console.log(card.id + " not added to sets DB");
-                          console.log(error);
-                      ***REMOVED***);
+                .catch((error) => ***REMOVED***
+                    console.log(card.id + " not added to sets DB");
+                    console.log(error);
+                ***REMOVED***);
                 await sleep(1);
             ***REMOVED***));
             await setQuery.save((err) => ***REMOVED***
@@ -46,17 +48,16 @@ const populateSetCards = async (cardsResult, setName) => ***REMOVED***
 
 exports.getAndPopulateSet = async (setURI, setName) => ***REMOVED***
     let has_more = true;
-    let cardURI = setURI;
 
     //loop to get api data from sets with multiple pages
     try ***REMOVED***
         while(has_more) ***REMOVED***
-            let result = await getSet(cardURI);
+            let result = await getSet(setURI);
             await populateSetCards(result, setName);
 
             has_more = result.has_more;
             if(has_more) ***REMOVED***
-                cardURI = result.next_page;
+                setURI = result.next_page;
             ***REMOVED***
         ***REMOVED***
     ***REMOVED*** catch (error) ***REMOVED***
