@@ -15,10 +15,16 @@ exports.getSets = async () => {
     }).catch((error) => console.log('error getting list of cards: ', error)); 
 }
 
-exports.populateSets = async (setResult) => {
-    await Promise.all(setResult.map(async (set) => {
-        try {
+exports.populateSets = async (setsResult) => {
+    await Promise.all(setsResult.map(async (set) => {
+        addSet: try {
             const setQuery = await Sets.findOne({"name": set.name}).exec();
+            //don't add if a digital only set (only released on MTGO)
+            if (set.digital) {
+                console.log(`Digital set ${set.name} ignored`);
+                break addSet;
+            }
+
             //if set doesn't exist in db add it
             if (!setQuery) {
                 let newSet = new Sets({
@@ -30,7 +36,8 @@ exports.populateSets = async (setResult) => {
                     if (err) console.log(err);
                 });
                 await sleep(1);
-                console.log(set.name, ' added');
+                console.log(`${set.name} added`);
+            //if new cards added to set, update
             } else if (setQuery.count != set.card_count) {
                 console.log("updating ", set.name);
                 let newSet = {
@@ -44,7 +51,6 @@ exports.populateSets = async (setResult) => {
                     {upsert: true}
                 ).exec()
                 .catch((error) => {console.log("error: "+error)});
-
             }
         } catch (error) {
             console.log(error);

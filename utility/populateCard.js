@@ -17,10 +17,6 @@ const getCard = async (cardID) => {
 }
 
 exports.addCard = async (card) => {
-    cardImage = null;
-    if (card.image_uris) {
-        cardImage = card.image_uris.normal;
-    }
 
     let newCard = {
         scryfallId: card.id,
@@ -30,9 +26,10 @@ exports.addCard = async (card) => {
         set: card.set_name
     };
 
+    //add price data
     if (card.prices.usd !== null) {
         newCard.price = [{value: card.prices.usd}];
-    } else if (card.prices.usd !== null) {
+    } else {
         newCard.price = [{value: card.prices.usd_foil}];
     }
 
