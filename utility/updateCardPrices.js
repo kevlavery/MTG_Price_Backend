@@ -18,6 +18,5 @@ Card.find(***REMOVED******REMOVED*** , (err, cards) => ***REMOVED***
     CardTools.updateCardPrice(cards)
     .then(() => ***REMOVED***
         mongoose.disconnect();
-        var t1 = performance.now();
     ***REMOVED***);
 ***REMOVED***);

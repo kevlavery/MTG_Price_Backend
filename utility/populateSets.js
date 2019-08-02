@@ -37,7 +37,8 @@ exports.populateSets = async (setsResult) => ***REMOVED***
                 ***REMOVED***);
                 await sleep(1);
                 console.log(`$***REMOVED***set.name***REMOVED*** added`);
-            //if new cards added to set, update
+
+            //if new cards added to set, update card count
             ***REMOVED*** else if (setQuery.count != set.card_count) ***REMOVED***
                 console.log("updating ", set.name);
                 let newSet = ***REMOVED***

@@ -12,13 +12,8 @@ mongoose.set('useCreateIndex', true);
 //still shows error
 //mongoose.set('useNewUrlParser', true);
 
-var attachCards = require('./attachCardsToSet');
-Sets.find(***REMOVED******REMOVED***, function addCards(err, sets) ***REMOVED***
-    if(err) ***REMOVED***
-        console.log(err);
-    ***REMOVED***
-    attachCards.populateAllSets(sets)
-    .then(() => ***REMOVED***
-        mongoose.disconnect();
-    ***REMOVED***);
+var addCardData = require('./addCardData');
+addCardData.addCardsToSets()
+.then(() => ***REMOVED***
+    mongoose.disconnect();
 ***REMOVED***);
