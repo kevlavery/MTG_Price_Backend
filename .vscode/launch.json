@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/utility/uploadAllCards"
+            "program": "${workspaceFolder}/utility/populateAllCards"
         }
     ]
 }

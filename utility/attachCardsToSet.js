@@ -1,18 +1,21 @@
 var requestPromise = require('request-promise-native');
 var Sets = require('../models/sets');
-var populateCard = require('./populateCard');
+var Cards = require('../models/card');
 
 const getSet = async (setURI) => {
-    return requestPromise({
-        url: setURI,
+    options = {
+        uri: setURI,
         method: "GET",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
-        }    
-    }).then(setContents => {
-        return JSON.parse(setContents);
-    }).catch((error) => console.log('error getting set ', setURI, error));   
+        },
+        json: true,
+        simple: false
+    }
+    return requestPromise(options)    
+    .then()
+    .catch((error) => console.log('error getting set ', setURI, error));   
 }
 
 const populateSetCards = async (cardsResult, setName) => {
@@ -20,22 +23,16 @@ const populateSetCards = async (cardsResult, setName) => {
         const cards = cardsResult.data;
         const setQuery = await Sets.findOne({name : setName}).exec();
         console.log(`Getting cards from ${setName}`);
-        
+
         try {
             await Promise.all(cards.map(async (card) => {
-                //add card to cards collection
-                await populateCard.addCard(card)
-                .catch((error) => {
-                    console.log(card.id + " not added to cards DB");
-                    console.log(error);
-                });
                 //add card scryfall ID to specific MTG set
                 await setQuery.updateOne({$addToSet: {cardIds: card.id}})
                 .catch((error) => {
                     console.log(card.id + " not added to sets DB");
                     console.log(error);
                 });
-                await sleep(1);
+                await sleep(100);
             }));
             await setQuery.save((err) => {
                 if (err) console.log(err);
@@ -50,8 +47,8 @@ exports.getAndPopulateSet = async (setURI, setName) => {
     let has_more = true;
 
     //loop to get api data from sets with multiple pages
-    try {
-        while(has_more) {
+    while(has_more) {
+        try {
             let result = await getSet(setURI);
             await populateSetCards(result, setName);
 
@@ -59,9 +56,9 @@ exports.getAndPopulateSet = async (setURI, setName) => {
             if(has_more) {
                 setURI = result.next_page;
             }
+        } catch (error) {
+            console.log(error)
         }
-    } catch (error) {
-        console.log(error)
     }
 };
 

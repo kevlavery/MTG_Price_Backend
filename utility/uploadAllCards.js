@@ -9,7 +9,7 @@ mongoose.connect(databaseConnection.url, function(err){
 });
 mongoose.set('useCreateIndex', true);
 
-var bulkUpload = require('./bulkUpload');
+var bulkUpload = require('./addCardData');
 
 bulkUpload.getAndPopulateBulkData()
 .then(() => {
