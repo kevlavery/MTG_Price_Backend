@@ -28,7 +28,7 @@ router.get('/:id', (req, res, next) => ***REMOVED***
 /* POST query for card by name. */
 router.post('/', (req, res, next) => ***REMOVED***
     let query = req.body.query;
-    Card.find(***REMOVED***"name" : new RegExp(".*"+query.trim()+".*", "i")***REMOVED***).exec((err, results) => ***REMOVED***
+    Card.find(***REMOVED***"name" : new RegExp("^"+query.trim()+"$", "i")***REMOVED***).exec((err, results) => ***REMOVED***
         if(err) ***REMOVED***
             console.log(err);
             res.status(500).send(err);
