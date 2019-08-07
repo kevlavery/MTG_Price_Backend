@@ -1,9 +1,8 @@
-var requestPromise = require('request-promise-native');
-var Card = require('../models/card');
-var promiseLimit = require('promise-limit')
+const requestPromise = require('request-promise-native');
+const Card = require('../models/card');
+const promiseLimit = require('promise-limit');
+const streamToMongoDB = require('stream-to-mongo-db').streamToMongoDB;
  
-var limit = promiseLimit(20)
-
 const getCard = async (cardID) => {
     return requestPromise({
         url: 'https://api.scryfall.com/cards/' + cardID,
@@ -76,49 +75,63 @@ exports.getAndPopulateCard = async (cardID) => {
 }
 
 exports.updateCardPrice = async (cards) => {
-    //break down to 100 card batches to reduce memory loads
-    let chunkSize = 100;
-    let subGroups = []
-    let groupSize = Math.ceil(cards.length/chunkSize)
-    for(var i = 0; i < groupSize; i++){
-        subGroups.push(cards.splice(0, chunkSize))
-    }
-    count = 0;
+    let limit = promiseLimit(40); //limit number of outstanding promise calls at a time
+    let count = 0;
 
-    await asyncForEach(subGroups, async (cardGroup) => {
-        await Promise.all(cardGroup.map(async (card) => {
-            return limit(async () => {
-                try {
-                    let updatedCard = await getCard(card.scryfallId);
-                    if (updatedCard) {
-                        let newPrice = null;
-                        if (updatedCard.prices.usd !== null) {
-                            newPrice = updatedCard.prices.usd;
-                        } else {
-                            newPrice = updatedCard.prices.usd_foil;
-                        }
-
-                        await Card.updateOne(
-                            {scryfallId: card.scryfallId},
-                            {$push: {price: {value: newPrice}}}
-                        )
-                        .catch((error) => {
-                            console.log("error updating db" + error);
-                        });
+    await Promise.all(cards.map(async (card) => {
+        return limit(async () => {
+            try {
+                //get card data from scryfall API
+                let updatedCard = await getCard(card.scryfallId);
+                if (updatedCard) {
+                    let newPrice = null;
+                    if (updatedCard.prices.usd !== null) {
+                        newPrice = updatedCard.prices.usd;
+                    } else {
+                        newPrice = updatedCard.prices.usd_foil;
                     }
-                } catch (error) {
-                    console.log(error);
+
+                    await Card.updateOne(
+                        {scryfallId: card.scryfallId},
+                        {$push: {price: {value: newPrice}}}
+                    )
+                    .catch((error) => {
+                        console.log("error updating db" + error);
+                    });
+                    count++;
+                    console.log(updatedCard.name)
                 }
-            })
-        }));
-        count++;
-        console.log("group " + count + " done");
-    });
+            } catch (error) {
+                console.log(error);
+            }
+        })
+    }));
+    console.log(`${count} cards updated`);
 }
 
+exports.updateCardPriceStream = async () => {
+    let count = 0;
 
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-        await callback(array[index], index, array);
+    for await (const card of Card.find()) {
+        let updatedCard = await getCard(card.scryfallId);
+        if (updatedCard) {
+            let newPrice = null;
+            if (updatedCard.prices.usd !== null) {
+                newPrice = updatedCard.prices.usd;
+            } else {
+                newPrice = updatedCard.prices.usd_foil;
+            }
+
+            await Card.updateOne(
+                {scryfallId: card.scryfallId},
+                {$push: {price: {value: newPrice}}}
+            )
+            .catch((error) => {
+                console.log("error updating db" + error);
+            });
+            count++;
+            console.log(updatedCard.name)
+        }
     }
+    console.log(`${count} cards updated`);    
 }
