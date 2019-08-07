@@ -7,6 +7,8 @@ const ***REMOVED*** Transform ***REMOVED*** = require('stream');
 const Card = require('../models/card');
 const Sets = require('../models/sets');
 
+const scryfallBulkUploadURL = "https://archive.scryfall.com/json/scryfall-all-cards.json";
+
 
 exports.addCardsToSets = async () => ***REMOVED***
     for await (const card of Card.find()) ***REMOVED***
@@ -24,7 +26,6 @@ exports.addCardsToSets = async () => ***REMOVED***
 const outputDBConfig = ***REMOVED*** dbURL : databaseConnection.url, 
     collection : 'cards',
     batchSize : 100 ***REMOVED***;
-
 const dbWriteStream = streamToMongoDB(outputDBConfig);
 
 const transformCard = new Transform(***REMOVED***
@@ -76,10 +77,10 @@ const transformCard = new Transform(***REMOVED***
 
 exports.getAndPopulateBulkData = async () => ***REMOVED***
     try ***REMOVED***
-        request.get("https://archive.scryfall.com/json/scryfall-all-cards.json")
+        request.get(scryfallBulkUploadURL)
                 .pipe(JSONStream.parse('*'))
-                .on('data', function(data) ***REMOVED***
-                    console.log(data.name);
+                .on('data', function(card) ***REMOVED***
+                    console.log(card.name);
                 ***REMOVED***)
                 .pipe(transformCard)
                 .pipe(dbWriteStream);

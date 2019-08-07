@@ -1,22 +1,31 @@
-var mongoose = require('mongoose');
-var databaseConnection = require('../data/DatabaseConnection.json');
-var Card = require('../models/card');
-var CardTools = require('./populateCard');
+const mongoose = require('mongoose');
+const databaseConnection = require('../data/DatabaseConnection.json');
+const Card = require('../models/card');
+const CardTools = require('./populateCard');
+const ***REMOVED*** performance ***REMOVED*** = require('perf_hooks');
 
 mongoose.connect(databaseConnection.url, function(err)***REMOVED***
     if (err) ***REMOVED***
-      console.log("Error connecting to MongoDB");
-      process.exit(1);
+    console.log("Error connecting to MongoDB");
+    process.exit(1);
     ***REMOVED***
-  ***REMOVED***);
+***REMOVED***);
 mongoose.set('useCreateIndex', true);
 
-Card.find(***REMOVED******REMOVED*** , (err, cards) => ***REMOVED***
-    if(err) ***REMOVED***
-        console.log(err);
-    ***REMOVED***
-    CardTools.updateCardPrice(cards)
+var t0 = performance.now();
+// Card.find(***REMOVED******REMOVED*** , (err, cards) => ***REMOVED***
+//     if(err) ***REMOVED***
+//         console.log(err);
+//     ***REMOVED***
+
+//     CardTools.updateCardPrice(cards)
+    CardTools.updateCardPriceStream()
     .then(() => ***REMOVED***
+        var t1 = performance.now();
+        console.log(`It took $***REMOVED***((t1-t0)/1000).toFixed(2)***REMOVED*** seconds to update card prices`);
+        const used = process.memoryUsage().heapUsed / 1024 / 1024;
+        console.log(`The script uses approximately $***REMOVED***used***REMOVED*** MB`);
         mongoose.disconnect();
     ***REMOVED***);
-***REMOVED***);
+// ***REMOVED***);
+

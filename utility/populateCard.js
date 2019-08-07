@@ -1,9 +1,8 @@
-var requestPromise = require('request-promise-native');
-var Card = require('../models/card');
-var promiseLimit = require('promise-limit')
+const requestPromise = require('request-promise-native');
+const Card = require('../models/card');
+const promiseLimit = require('promise-limit');
+const streamToMongoDB = require('stream-to-mongo-db').streamToMongoDB;
  
-var limit = promiseLimit(20)
-
 const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
         url: 'https://api.scryfall.com/cards/' + cardID,
@@ -76,49 +75,63 @@ exports.getAndPopulateCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.updateCardPrice = async (cards) => ***REMOVED***
-    //break down to 100 card batches to reduce memory loads
-    let chunkSize = 100;
-    let subGroups = []
-    let groupSize = Math.ceil(cards.length/chunkSize)
-    for(var i = 0; i < groupSize; i++)***REMOVED***
-        subGroups.push(cards.splice(0, chunkSize))
-    ***REMOVED***
-    count = 0;
+    let limit = promiseLimit(40); //limit number of outstanding promise calls at a time
+    let count = 0;
 
-    await asyncForEach(subGroups, async (cardGroup) => ***REMOVED***
-        await Promise.all(cardGroup.map(async (card) => ***REMOVED***
-            return limit(async () => ***REMOVED***
-                try ***REMOVED***
-                    let updatedCard = await getCard(card.scryfallId);
-                    if (updatedCard) ***REMOVED***
-                        let newPrice = null;
-                        if (updatedCard.prices.usd !== null) ***REMOVED***
-                            newPrice = updatedCard.prices.usd;
-                        ***REMOVED*** else ***REMOVED***
-                            newPrice = updatedCard.prices.usd_foil;
-                        ***REMOVED***
-
-                        await Card.updateOne(
-                            ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
-                            ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: newPrice***REMOVED******REMOVED******REMOVED***
-                        )
-                        .catch((error) => ***REMOVED***
-                            console.log("error updating db" + error);
-                        ***REMOVED***);
+    await Promise.all(cards.map(async (card) => ***REMOVED***
+        return limit(async () => ***REMOVED***
+            try ***REMOVED***
+                //get card data from scryfall API
+                let updatedCard = await getCard(card.scryfallId);
+                if (updatedCard) ***REMOVED***
+                    let newPrice = null;
+                    if (updatedCard.prices.usd !== null) ***REMOVED***
+                        newPrice = updatedCard.prices.usd;
+                    ***REMOVED*** else ***REMOVED***
+                        newPrice = updatedCard.prices.usd_foil;
                     ***REMOVED***
-                ***REMOVED*** catch (error) ***REMOVED***
-                    console.log(error);
+
+                    await Card.updateOne(
+                        ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                        ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: newPrice***REMOVED******REMOVED******REMOVED***
+                    )
+                    .catch((error) => ***REMOVED***
+                        console.log("error updating db" + error);
+                    ***REMOVED***);
+                    count++;
+                    console.log(updatedCard.name)
                 ***REMOVED***
-            ***REMOVED***)
-        ***REMOVED***));
-        count++;
-        console.log("group " + count + " done");
-    ***REMOVED***);
+            ***REMOVED*** catch (error) ***REMOVED***
+                console.log(error);
+            ***REMOVED***
+        ***REMOVED***)
+    ***REMOVED***));
+    console.log(`$***REMOVED***count***REMOVED*** cards updated`);
 ***REMOVED***
 
+exports.updateCardPriceStream = async () => ***REMOVED***
+    let count = 0;
 
-async function asyncForEach(array, callback) ***REMOVED***
-    for (let index = 0; index < array.length; index++) ***REMOVED***
-        await callback(array[index], index, array);
+    for await (const card of Card.find()) ***REMOVED***
+        let updatedCard = await getCard(card.scryfallId);
+        if (updatedCard) ***REMOVED***
+            let newPrice = null;
+            if (updatedCard.prices.usd !== null) ***REMOVED***
+                newPrice = updatedCard.prices.usd;
+            ***REMOVED*** else ***REMOVED***
+                newPrice = updatedCard.prices.usd_foil;
+            ***REMOVED***
+
+            await Card.updateOne(
+                ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: newPrice***REMOVED******REMOVED******REMOVED***
+            )
+            .catch((error) => ***REMOVED***
+                console.log("error updating db" + error);
+            ***REMOVED***);
+            count++;
+            console.log(updatedCard.name)
+        ***REMOVED***
     ***REMOVED***
+    console.log(`$***REMOVED***count***REMOVED*** cards updated`);    
 ***REMOVED***
