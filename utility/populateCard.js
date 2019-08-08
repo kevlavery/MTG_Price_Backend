@@ -15,7 +15,6 @@ const getCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
-
     let newCard = ***REMOVED***
         scryfallId: card.id,
         name: card.name,
