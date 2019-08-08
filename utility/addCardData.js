@@ -4,24 +4,7 @@ const streamToMongoDB = require('stream-to-mongo-db').streamToMongoDB;
 const databaseConnection = require('../data/DatabaseConnection.json');
 const { Transform } = require('stream');
 
-const Card = require('../models/card');
-const Sets = require('../models/sets');
-
 const scryfallBulkUploadURL = "https://archive.scryfall.com/json/scryfall-all-cards.json";
-
-
-exports.addCardsToSets = async () => {
-    for await (const card of Card.find()) {
-        console.log(card.name);
-        const setQuery = await Sets.findOne({name : card.set}).exec();
-        setQuery.updateOne({$addToSet: {cardIds: card.scryfallId}})
-        setQuery.save((err) => {
-            if (err) console.log(err);
-        });
-    }
-}
-
-
 
 const outputDBConfig = { dbURL : databaseConnection.url, 
     collection : 'cards',

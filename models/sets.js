@@ -7,8 +7,7 @@ var setsSchema = new Schema({
           unique: true
         },
   count: Number,
-  searchURI: String,
-  cardIds: [String]
+  searchURI: String
 });
 
 module.exports = mongoose.model('set', setsSchema);

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var databaseConnection = require('../data/DatabaseConnection.json');
-var Sets = require('../models/sets');
 
 mongoose.connect(databaseConnection.url, function(err){
     if (err) {
