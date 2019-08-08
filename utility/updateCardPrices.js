@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const databaseConnection = require('../data/DatabaseConnection.json');
 const CardTools = require('./populateCard');
+const ***REMOVED*** performance ***REMOVED*** = require('perf_hooks');
 
 mongoose.connect(databaseConnection.url, function(err)***REMOVED***
     if (err) ***REMOVED***
@@ -19,4 +20,3 @@ CardTools.updateCardPriceStream()
     console.log(`The script uses approximately $***REMOVED***used***REMOVED*** MB`);
     mongoose.disconnect();
 ***REMOVED***);
-
