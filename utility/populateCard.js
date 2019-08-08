@@ -137,7 +137,6 @@ exports.updateCardPriceStream = async () => ***REMOVED***
                 console.log(`Error updating db for $***REMOVED***card.name***REMOVED*** with error $***REMOVED***error***REMOVED***`);
             ***REMOVED***
         ***REMOVED***
-        console.log(card.name)
     ***REMOVED***
     console.log(`$***REMOVED***count***REMOVED*** cards updated.`)
 ***REMOVED***
