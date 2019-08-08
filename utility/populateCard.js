@@ -137,7 +137,6 @@ exports.updateCardPriceStream = async () => {
                 console.log(`Error updating db for ${card.name} with error ${error}`);
             }
         }
-        console.log(card.name)
     }
     console.log(`${count} cards updated.`)
 }
