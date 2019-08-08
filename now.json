@@ -1,4 +1,0 @@
-***REMOVED***
-    "version": 2,
-    "builds": [***REMOVED*** "src": "/bin/www", "use": "@now/node-server" ***REMOVED***]
-***REMOVED***
