@@ -128,7 +128,7 @@ exports.updateCardPriceStream = async () => {
             }
 
             try {
-                await Card.updateOne(
+                Card.updateOne(
                     {scryfallId: card.scryfallId},
                     {$push: {price: {value: newPrice}}}
                 )
@@ -137,6 +137,7 @@ exports.updateCardPriceStream = async () => {
                 console.log(`Error updating db for ${card.name} with error ${error}`);
             }
         }
+        console.log(card.name)
     }
     console.log(`${count} cards updated.`)
 }
