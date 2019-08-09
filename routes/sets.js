@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var Sets = require('../models/sets');
 var Card = require('../models/card');
 
 router.get('/', (req, res, next) => ***REMOVED***
-    Sets.find().exec((err, sets) => ***REMOVED***
-        let setNames = sets.map(set => set.name); 
-        res.status(200).send(setNames);
+    Card.distinct('set').exec((err, sets) => ***REMOVED***
         if(err) ***REMOVED***
             console.log(err);
+            res.status(500).send("Database Error");
+        ***REMOVED*** else ***REMOVED***
+            res.status(200).send(sets.sort());
         ***REMOVED***
-    ***REMOVED***);
+    ***REMOVED***)
 ***REMOVED***);
 
 router.get('/:name', (req, res, next) => ***REMOVED***
