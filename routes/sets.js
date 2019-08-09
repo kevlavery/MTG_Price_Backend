@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var Sets = require('../models/sets');
 var Card = require('../models/card');
 
 router.get('/', (req, res, next) => {
-    Sets.find().exec((err, sets) => {
-        let setNames = sets.map(set => set.name); 
-        res.status(200).send(setNames);
+    Card.distinct('set').exec((err, sets) => {
         if(err) {
             console.log(err);
+            res.status(500).send("Database Error");
+        } else {
+            res.status(200).send(sets.sort());
         }
-    });
+    })
 });
 
 router.get('/:name', (req, res, next) => {
