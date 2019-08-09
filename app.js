@@ -1,7 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
@@ -14,13 +13,13 @@ mongoose.connect(databaseConnection.url, function(err)***REMOVED***
   ***REMOVED***
 ***REMOVED***);
 
+var app = express();
+app.use(cors());
+
 //Routes
 var indexRouter = require('./routes/index');
 var sets = require('./routes/sets');
 var card = require('./routes/card');
-
-var app = express();
-app.use(cors());
 
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +28,6 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded(***REMOVED*** extended: false ***REMOVED***));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
