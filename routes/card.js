@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var cardUtility = require('../utility/populateCard')
-var Card = require('../models/card');
+const express = require('express');
+const router = express.Router();
+const cardUtility = require('../utility/populateCard')
+const Card = require('../models/card');
+const sanitize = require('mongo-sanitize');
 
 /* GET specified card based on URL parameter scryfallID. */
 router.get('/:id', (req, res, next) => {
@@ -27,7 +28,7 @@ router.get('/:id', (req, res, next) => {
 
 /* POST query for card by name. */
 router.post('/', (req, res, next) => {
-    let query = req.body.query;
+    let query = sanitize(req.body.query);
     Card.find({"name" : new RegExp(".*"+query.trim()+".*", "i")}).exec((err, results) => {
         if(err) {
             console.log(err);
