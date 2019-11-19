@@ -98,7 +98,6 @@ exports.updateCardPrice = async (cards) => ***REMOVED***
                         console.log("error updating db" + error);
                     ***REMOVED***);
                     count++;
-                    console.log(updatedCard.name)
                 ***REMOVED***
             ***REMOVED*** catch (error) ***REMOVED***
                 console.log(error);
@@ -127,10 +126,10 @@ exports.updateCardPriceStream = async () => ***REMOVED***
             ***REMOVED***
 
             try ***REMOVED***
-                Card.updateOne(
-                    ***REMOVED***scryfallId: card.scryfallId***REMOVED***,
+                await Card.updateOne(
+                    ***REMOVED***scryfallId: card.scryfallId***REMOVED***, 
                     ***REMOVED***$push: ***REMOVED***price: ***REMOVED***value: newPrice***REMOVED******REMOVED******REMOVED***
-                )
+                    );
                 count++;
             ***REMOVED*** catch (error) ***REMOVED***
                 console.log(`Error updating db for $***REMOVED***card.name***REMOVED*** with error $***REMOVED***error***REMOVED***`);
