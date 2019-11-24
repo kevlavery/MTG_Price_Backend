@@ -8,7 +8,7 @@
     "addCardsToSets": "node ./utility/populateAllCards",
     "updateCardPrices": "node ./utility/updateCardPrices",
     "bulkUploadCards": "node ./utility/uploadAllCards",
-    "build": "node build"
+    "build": "node ./bin/www"
   ***REMOVED***,
   "dependencies": ***REMOVED***
     "JSONStream": "^1.3.5",
