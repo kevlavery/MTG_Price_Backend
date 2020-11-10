@@ -4,8 +4,12 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors');
 
+// database connection info
+var databaseConnection = require('./data/DatabaseConnection.json');
+var dbsConnect = process.env.MONGODB_URI || databaseConnection.url;
+
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI, function(err)***REMOVED***
+mongoose.connect(dbsConnect , function(err)***REMOVED***
   if (err) ***REMOVED***
     console.log("Error connecting to MongoDB");
     process.exit(1);
