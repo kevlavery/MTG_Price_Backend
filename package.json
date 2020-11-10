@@ -2,7 +2,8 @@
   "name": "mtg-price-backend",
   "version": "1.0.0",
   "engines": ***REMOVED***
-    "node": "15.x"
+    "node": "15.x",
+    "npm": "7.x"
   ***REMOVED***,
   "private": true,
   "scripts": ***REMOVED***
