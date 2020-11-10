@@ -1,6 +1,9 @@
 ***REMOVED***
   "name": "mtg-price-backend",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "engines": ***REMOVED***
+    "node": "15.x"
+  ***REMOVED***,
   "private": true,
   "scripts": ***REMOVED***
     "start": "node ./bin/www",
