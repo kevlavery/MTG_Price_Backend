@@ -6,6 +6,9 @@
 # testing
 /coverage
 
+# config files
+/data
+
 # production
 #/build
 #/build/*.js
