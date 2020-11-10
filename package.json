@@ -11,8 +11,7 @@
     "populateSets": "node ./utility/populate",
     "addCardsToSets": "node ./utility/populateAllCards",
     "updateCardPrices": "node ./utility/updateCardPrices",
-    "bulkUploadCards": "node ./utility/uploadAllCards",
-    "build": "node ./bin/www"
+    "bulkUploadCards": "node ./utility/uploadAllCards"
   ***REMOVED***,
   "dependencies": ***REMOVED***
     "cookie-parser": "^1.4.4",
