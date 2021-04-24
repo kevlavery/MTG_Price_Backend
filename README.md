@@ -15,10 +15,16 @@ Install the dependant node modules:
 
 Populate the DB with the base MTG set data with with the following commands (requires internet connection):
 ```
-  $ npm run populate
-  $ npm run populateCards
+  $ npm run populateSets
+  $ npm run addCartsToSets
 ```
 The first fetches data of all the MTG sets and the second gets all of card data.
+
+Update prices with the following command:
+```
+  $ npm run bulkUploadCards
+```
+Run this nightly to keep prices up to date daily.
 
 ### Development Build and Run
 
