@@ -24,7 +24,7 @@ Update prices with the following command:
 ```
   $ npm run bulkUploadCards
 ```
-Run this nightly to keep prices up to date daily.
+Run this nightly to keep prices current.
 
 ### Development Build and Run
 

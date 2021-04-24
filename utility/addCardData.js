@@ -1,15 +1,28 @@
 const request = require('request');
+const requestPromise = require('request-promise-native');
 const JSONStream = require('JSONStream');
 const streamToMongoDB = require('stream-to-mongo-db').streamToMongoDB;
 const databaseConnection = require('../data/DatabaseConnection.json');
 const ***REMOVED*** Transform ***REMOVED*** = require('stream');
 
-const scryfallBulkUploadURL = "https://archive.scryfall.com/json/scryfall-all-cards.json";
-
+const scryfallBulkEndpoints = "https://api.scryfall.com/bulk-data";
+const bulkDataName = "Default Cards"
 const outputDBConfig = ***REMOVED*** dbURL : databaseConnection.url, 
     collection : 'cards',
     batchSize : 100 ***REMOVED***;
 const dbWriteStream = streamToMongoDB(outputDBConfig);
+
+const getBulkDataEndpoints = async () => ***REMOVED***
+    return requestPromise(***REMOVED***
+        url: scryfallBulkEndpoints,
+        method: "GET",
+        headers: ***REMOVED***
+            "Content-Type": "application/json"
+        ***REMOVED***    
+    ***REMOVED***).then((endpointData) => ***REMOVED***
+        return JSON.parse(endpointData);
+    ***REMOVED***).catch((error) => console.log('error getting bulk upload endpoint data'));
+***REMOVED***
 
 const transformCard = new Transform(***REMOVED***
     objectMode: true,
@@ -60,7 +73,11 @@ const transformCard = new Transform(***REMOVED***
 
 exports.getAndPopulateBulkData = async () => ***REMOVED***
     try ***REMOVED***
-        request.get(scryfallBulkUploadURL)
+        let endPointData = await getBulkDataEndpoints();
+        let defaultCardsURL = endPointData.data
+                            .filter(endpoint => endpoint.name === bulkDataName)[0]
+                            .download_uri;
+        request.get(defaultCardsURL)
                 .pipe(JSONStream.parse('*'))
                 .on('data', function(card) ***REMOVED***
                     console.log(card.name);
@@ -68,7 +85,6 @@ exports.getAndPopulateBulkData = async () => ***REMOVED***
                 .pipe(transformCard)
                 .pipe(dbWriteStream);
 
-        //await populateDB(bulkData);
     ***REMOVED*** catch (error) ***REMOVED***
         console.log(error);
     ***REMOVED***
