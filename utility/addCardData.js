@@ -27,7 +27,11 @@ const getBulkDataEndpoints = async () => ***REMOVED***
 const transformCard = new Transform(***REMOVED***
     objectMode: true,
     transform(card, encoding, callback) ***REMOVED***
-        if(card.lang === "en" && !card.digital && card.set_type !== "token") ***REMOVED***
+        if(card.lang === "en" 
+            && !card.digital 
+            && card.set_type !== "token" 
+            && card.set_type !== "memorabilia"
+        ) ***REMOVED***
             let newCard = ***REMOVED***
                 scryfallId: card.id,
                 name: card.name,
@@ -57,11 +61,15 @@ const transformCard = new Transform(***REMOVED***
             ***REMOVED***
 
             //add image or both if transform card
-            if (card.layout == "transform" || card.layout == "double_faced_token") ***REMOVED***
-                newCard.imageURL = card.card_faces[0].image_uris.normal;
-                newCard.faces.back.imageURL = card.card_faces[1].image_uris.normal;
-            ***REMOVED*** else ***REMOVED***
-                newCard.imageURL = card.image_uris.normal;
+            try ***REMOVED***
+                if (card.layout == "transform" || card.layout == "double_faced_token") ***REMOVED***
+                    newCard.imageURL = card.card_faces[0].image_uris.normal;
+                    newCard.faces.back.imageURL = card.card_faces[1].image_uris.normal;
+                ***REMOVED*** else ***REMOVED***
+                    newCard.imageURL = card.image_uris.normal;
+                ***REMOVED***
+            ***REMOVED*** catch (error) ***REMOVED***
+                console.log(card)
             ***REMOVED***
 
             //push card object to next stream
