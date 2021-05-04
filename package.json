@@ -8,10 +8,9 @@
   "private": true,
   "scripts": ***REMOVED***
     "start": "node ./bin/www",
-    "populateSets": "node ./utility/populate",
-    "addCardsToSets": "node ./utility/populateAllCards",
     "updateCardPrices": "node ./utility/updateCardPrices",
-    "bulkUploadCards": "node ./utility/uploadAllCards"
+    "bulkUploadCards": "node ./utility/uploadAllCards",
+    "addNewCards": "node ./utility/addNewCards"
   ***REMOVED***,
   "dependencies": ***REMOVED***
     "cookie-parser": "^1.4.4",

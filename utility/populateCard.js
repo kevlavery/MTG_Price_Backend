@@ -1,6 +1,7 @@
 const requestPromise = require('request-promise-native');
 const Card = require('../models/card');
 const promiseLimit = require('promise-limit');
+const cardTool = require('./addCardData');
  
 const getCard = async (cardID) => ***REMOVED***
     return requestPromise(***REMOVED***
@@ -15,46 +16,7 @@ const getCard = async (cardID) => ***REMOVED***
 ***REMOVED***
 
 exports.addCard = async (card) => ***REMOVED***
-    let newCard = ***REMOVED***
-        scryfallId: card.id,
-        name: card.name,
-        cmc: card.cmc,
-        scryfallLink: card.scryfall_uri,
-        set: card.set_name
-    ***REMOVED***;
-
-    //add price data
-    if (card.prices.usd !== null) ***REMOVED***
-        newCard.price = [***REMOVED***value: card.prices.usd***REMOVED***];
-    ***REMOVED*** else ***REMOVED***
-        newCard.price = [***REMOVED***value: card.prices.usd_foil***REMOVED***];
-    ***REMOVED***
-
-    //add oracle text and name 
-    if (card.layout == "flip" || card.layout == "split" || card.layout == "transform" || card.layout == "double_faced_token") ***REMOVED***
-        faces = ***REMOVED***
-            front: ***REMOVED***
-                name: card.card_faces[0].name
-            ***REMOVED***,
-            back: ***REMOVED***
-                name: card.card_faces[1].name,
-                oracle: card.card_faces[1].oracle_text
-            ***REMOVED***
-        ***REMOVED***
-        
-        newCard.oracle = card.card_faces[0].oracle_text;
-        newCard.faces = faces;
-    ***REMOVED*** else ***REMOVED***
-        newCard.oracle = card.oracle_text;
-    ***REMOVED***
-
-    //add image or both if transform card
-    if (card.layout == "transform" || card.layout == "double_faced_token") ***REMOVED***
-        newCard.imageURL = card.card_faces[0].image_uris.normal;
-        newCard.faces.back.imageURL = card.card_faces[1].image_uris.normal;;
-    ***REMOVED*** else ***REMOVED***
-        newCard.imageURL = card.image_uris.normal;
-    ***REMOVED***
+    let newCard = cardTool.populateNewCard(card);
 
     //updates object or creates new if none found
     Card.findOneAndUpdate(
