@@ -16,7 +16,7 @@ console.log(Date(Date.now()));
 CardTools.updateCardPriceStream()
 .then(() => ***REMOVED***
     var t1 = performance.now();	
-    console.log(`It took $***REMOVED***((t1-t0)/1000).toFixed(2)***REMOVED*** seconds to update card prices`);	
+    console.log(`It took $***REMOVED***((t1-t0)/1000).toFixed(2)***REMOVED*** seconds to add new cards`);	
     const used = process.memoryUsage().heapUsed / 1024 / 1024;	
     console.log(`The script uses approximately $***REMOVED***used***REMOVED*** MB`);
     mongoose.disconnect();

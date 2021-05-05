@@ -30,6 +30,5 @@
     "run-func": "^1.0.3",
     "stream-to-mongo-db": "^1.6.0"
   ***REMOVED***,
-  "main": "./bin/www",
-  "devDependencies": ***REMOVED******REMOVED***
+  "main": "./bin/www"
 ***REMOVED***
