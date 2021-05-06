@@ -2,32 +2,32 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var cardSchema = new Schema(
-  ***REMOVED***
-    scryfallId: ***REMOVED***
+  {
+    scryfallId: {
                   type: String, 
                   unique: true
-                ***REMOVED***,
+                },
     name: String,
     imageURL: String,
-    price: [***REMOVED***
-      date: ***REMOVED*** type: Date, default: Date.now ***REMOVED***,
+    price: [{
+      date: { type: Date, default: Date.now },
       value: Number
-    ***REMOVED***],
+    }],
     oracle: String,
     cmc: Number,
     scryfallLink: String,
-    faces: ***REMOVED***
-      front: ***REMOVED***
+    faces: {
+      front: {
         name: String
-      ***REMOVED***,
-      back: ***REMOVED***
+      },
+      back: {
         name: String,
         imageURL: String,
         oracle: String
-      ***REMOVED***
-    ***REMOVED***,
+      }
+    },
     set: String
-  ***REMOVED***
+  }
 );
 
 module.exports = mongoose.model('cards', cardSchema);

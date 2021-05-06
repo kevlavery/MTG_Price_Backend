@@ -5,38 +5,38 @@ const Card = require('../models/card');
 const sanitize = require('mongo-sanitize');
 
 /* GET specified card based on URL parameter scryfallID. */
-router.get('/:id', (req, res, next) => ***REMOVED***
+router.get('/:id', (req, res, next) => {
     let cardId = req.params.id;
-    Card.findOne(***REMOVED***"scryfallId": cardId***REMOVED***).exec(async (err, card) => ***REMOVED***
-        if(err) ***REMOVED***
+    Card.findOne({"scryfallId": cardId}).exec(async (err, card) => {
+        if(err) {
             console.log(err);
             res.status(500).send(err);
-        ***REMOVED***
+        }
 
-        if(card) ***REMOVED***
+        if(card) {
             res.status(200).send(card);
-        ***REMOVED*** else ***REMOVED***
-            try ***REMOVED***
+        } else {
+            try {
                 await cardUtility.getAndPopulateCard(cardId);
                 res.redirect(req.originalUrl);
-            ***REMOVED*** catch (err) ***REMOVED***
+            } catch (err) {
                 res.status(500).send(err);
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***);
-***REMOVED***);
+            }
+        }
+    });
+});
 
 /* POST query for card by name. */
-router.post('/', (req, res, next) => ***REMOVED***
+router.post('/', (req, res, next) => {
     let query = sanitize(req.body.query);
-    Card.find(***REMOVED***"name" : new RegExp(".*"+query.trim()+".*", "i")***REMOVED***).exec((err, results) => ***REMOVED***
-        if(err) ***REMOVED***
+    Card.find({"name" : new RegExp(".*"+query.trim()+".*", "i")}).exec((err, results) => {
+        if(err) {
             console.log(err);
             res.status(500).send(err);
-        ***REMOVED*** else ***REMOVED***
+        } else {
             res.status(200).send(results);
-        ***REMOVED***
-    ***REMOVED***)
-***REMOVED***);
+        }
+    })
+});
 
 module.exports = router;

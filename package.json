@@ -1,18 +1,18 @@
-***REMOVED***
+{
   "name": "mtg-price-backend",
   "version": "1.0.0",
-  "engines": ***REMOVED***
+  "engines": {
     "node": "15.x",
     "npm": "7.x"
-  ***REMOVED***,
+  },
   "private": true,
-  "scripts": ***REMOVED***
+  "scripts": {
     "start": "node ./bin/www",
     "updateCardPrices": "node ./utility/updateCardPrices",
     "bulkUploadCards": "node ./utility/uploadAllCards",
     "addNewCards": "node ./utility/addNewCards"
-  ***REMOVED***,
-  "dependencies": ***REMOVED***
+  },
+  "dependencies": {
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -29,6 +29,6 @@
     "request-promise-native": "^1.0.8",
     "run-func": "^1.0.3",
     "stream-to-mongo-db": "^1.6.0"
-  ***REMOVED***,
+  },
   "main": "./bin/www"
-***REMOVED***
+}
