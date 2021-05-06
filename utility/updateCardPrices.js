@@ -12,7 +12,7 @@ mongoose.connect(databaseConnection.url, function(err){
 mongoose.set('useCreateIndex', true);
 
 var t0 = performance.now();
-console.log(Date(Date.now()));
+console.log(`Starting to update prices at ${Date(Date.now())}`);
 CardTools.updateCardPriceStream()
 .then(() => {
     var t1 = performance.now();	
