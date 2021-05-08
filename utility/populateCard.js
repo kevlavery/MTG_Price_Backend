@@ -1,6 +1,5 @@
 const requestPromise = require('request-promise-native');
 const Card = require('../models/card');
-const promiseLimit = require('promise-limit');
 const cardTool = require('./addCardData');
  
 const getCard = async (cardID) => {
@@ -15,7 +14,7 @@ const getCard = async (cardID) => {
     }).catch((error) => console.log('error getting card with Scryfall ID', cardID));   
 }
 
-exports.addCard = async (card) => {
+const addCard = async (card) => {
     let newCard = cardTool.populateNewCard(card);
 
     //updates object or creates new if none found
@@ -29,49 +28,64 @@ exports.addCard = async (card) => {
     });
 }
 
-exports.getAndPopulateCard = async (cardID) => {
+const getAndPopulateCard = async (cardID) => {
     let cardData = await getCard(cardURI);
     await addCard(cardData);
 }
 
 //updates quickly but with more memory (~4min using ~1200mb)
-exports.updateCardPrice = async (cards) => {
-    var limit = promiseLimit(40); //limit number of outstanding promise calls at a time
-    var count = 0;
+const updateCardPrice = async () => {
+    try {
+        let bulkData = cardTool.getBulkCardData();
+        console.log(`${bulkData.length} cards downloaded from scryfall bulk json`);
 
-    await Promise.all(cards.map(async (card) => {
-        return limit(async () => {
-            try {
-                //get card data from scryfall API
-                var updatedCard = await getCard(card.scryfallId);
-                if (updatedCard) {
-                    var newPrice = null;
-                    if (updatedCard.prices.usd !== null) {
-                        newPrice = updatedCard.prices.usd;
-                    } else {
-                        newPrice = updatedCard.prices.usd_foil;
-                    }
+        let dbContents = await Card.find().lean();
+        console.log(`${dbContents.length} cards found in DB`);
 
-                    await Card.updateOne(
-                        {scryfallId: card.scryfallId},
-                        {$push: {price: {value: newPrice}}}
-                    )
-                    .catch((error) => {
-                        console.log("error updating db" + error);
-                    });
-                    count++;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        })
-    }));
-    console.log(`${count} cards updated`);
+        dbContents = dbContents.map(card => {
+            
+        });
+    } catch (error) {
+        console.log(error);
+    }
+    // var limit = promiseLimit(40); //limit number of outstanding promise calls at a time
+    // var count = 0;
+
+    // let cards = await Card.find();
+    // await Promise.all(cards.map(async (card) => {
+    //     return limit(async () => {
+    //         try {
+    //             //get card data from scryfall API
+    //             var updatedCard = await getCard(card.scryfallId);
+    //             if (updatedCard) {
+    //                 var newPrice = null;
+    //                 if (updatedCard.prices.usd !== null) {
+    //                     newPrice = updatedCard.prices.usd;
+    //                 } else {
+    //                     newPrice = updatedCard.prices.usd_foil;
+    //                 }
+
+    //                 await Card.updateOne(
+    //                     {scryfallId: card.scryfallId},
+    //                     {$push: {price: {value: newPrice}}}
+    //                 )
+    //                 .catch((error) => {
+    //                     console.log("error updating db" + error);
+    //                 });
+    //                 count++;
+    //                 if (count % 100 === 0) console.log(`${count} cards updated`);
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     })
+    // }));
+    // console.log(`${count} cards updated`);
 }
 
 //Updates Cards slowly but uses minimal memory (~90 min using < 40mb)
-exports.updateCardPriceStream = async () => {
-    var count = 0;
+const updateCardPriceStream = async () => {
+    let count = 0;
     for await (const card of Card.find()) {
         try {
             var updatedCard = await getCard(card.scryfallId);
@@ -101,3 +115,10 @@ exports.updateCardPriceStream = async () => {
     }
     console.log(`${count} cards updated.`)
 }
+
+module.exports = {
+  updateCardPriceStream,
+  updateCardPrice,
+  getAndPopulateCard,
+  addCard,
+};

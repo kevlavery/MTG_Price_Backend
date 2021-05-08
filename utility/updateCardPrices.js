@@ -13,10 +13,10 @@ mongoose.set('useCreateIndex', true);
 
 var t0 = performance.now();
 console.log(`Starting to update prices at ${Date(Date.now())}`);
-CardTools.updateCardPriceStream()
+CardTools.updateCardPrice()
 .then(() => {
     var t1 = performance.now();	
-    console.log(`It took ${((t1-t0)/1000).toFixed(2)} seconds to add new cards`);	
+    console.log(`It took ${((t1-t0)/1000).toFixed(2)} seconds to update card prices`);	
     const used = process.memoryUsage().heapUsed / 1024 / 1024;	
     console.log(`The script uses approximately ${used} MB`);
     mongoose.disconnect();

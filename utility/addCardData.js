@@ -29,6 +29,23 @@ const getBulkDataEndpoints = async () => {
     }).catch((error) => console.log('error getting bulk upload endpoint data'));
 };
 
+const getBulkCardData = async () => {
+    let endPointData = await getBulkDataEndpoints();
+    let defaultCardsURL = endPointData.data
+                        .filter(endpoint => endpoint.name === bulkDataName)[0]
+                        .download_uri;
+                        
+    return bulkData = await requestPromise({
+        url: defaultCardsURL,
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }    
+    }).then((endpointData) => {
+        return JSON.parse(endpointData);
+    }).catch((error) => console.log('error getting bulk data'));
+}
+
 const transformCard = new Transform({
     objectMode: true,
     transform(card, encoding, callback) {
@@ -119,19 +136,7 @@ const getAndPopulateBulkData = async () => {
 
 const addNewCards = async () => {
     try {
-        let endPointData = await getBulkDataEndpoints();
-        let defaultCardsURL = endPointData.data
-                            .filter(endpoint => endpoint.name === bulkDataName)[0]
-                            .download_uri;
-        let bulkData = await requestPromise({
-            url: defaultCardsURL,
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }    
-        }).then((endpointData) => {
-            return JSON.parse(endpointData);
-        }).catch((error) => console.log('error getting bulk data'));
+        let bulkData = await getBulkCardData();
         console.log(`${bulkData.length} cards downloaded from scryfall bulk json`);
 
         let dbContents = await Card.find().lean();
@@ -162,11 +167,15 @@ const addNewCards = async () => {
             console.log(`adding group ${count}`)
             await Card.insertMany(cardGroup);
         }
+        console.log(`${count} cards added`);
     } catch (error) {
         console.log(error);
     }
 };
 
-exports.addNewCards = addNewCards;
-exports.populateNewCard = populateNewCard;
-exports.getAndPopulateBulkData = getAndPopulateBulkData;
+module.exports = {
+  addNewCards,
+  populateNewCard,
+  getAndPopulateBulkData,
+  getBulkCardData,
+};

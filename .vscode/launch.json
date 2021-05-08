@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/utility/test",
+      "program": "${workspaceFolder}/utility/addNewCards",
       "outputCapture": "std"
     }
   ]
