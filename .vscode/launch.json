@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/utility/addNewCards",
+      "program": "${workspaceFolder}/utility/updateCardPrices",
       "outputCapture": "std"
     }
   ]

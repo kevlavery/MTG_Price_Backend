@@ -13,7 +13,7 @@ mongoose.set('useCreateIndex', true);
 
 var t0 = performance.now();
 console.log(`Starting to update prices at ${Date(Date.now())}`);
-CardTools.updateCardPrice()
+CardTools.updateCardPriceStream()
 .then(() => {
     var t1 = performance.now();	
     console.log(`It took ${((t1-t0)/1000).toFixed(2)} seconds to update card prices`);	
