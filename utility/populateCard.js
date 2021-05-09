@@ -1,6 +1,4 @@
 const requestPromise = require('request-promise-native');
-const promiseLimit = require('promise-limit');
-// const { db } = require('../models/card');
 const Card = require('../models/card');
 const cardTool = require('./addCardData');
  
@@ -46,50 +44,36 @@ const updateCardPrice = async () => {
 
         let count = 0;
         let bulkUpdateOps = [];
-        // let limit = promiseLimit(10);
-        // await Promise.all(cards.map(async (card) => {
-        //     return limit(async () => {
+
         for (const card of dbContents) {
-                let bulkDataCard = bulkData.find(scryfallCard => 
-                    scryfallCard.id === card.scryfallId
-                );
+            let bulkDataCard = bulkData.find(scryfallCard => 
+                scryfallCard.id === card.scryfallId
+            );
 
-                if (typeof bulkDataCard !== "undefined") {
-                    var newPrice = null;
-                    if (bulkDataCard.prices.usd !== null) {
-                        newPrice = bulkDataCard.prices.usd;
-                    } else {
-                        newPrice = bulkDataCard.prices.usd_foil;
-                    }
-
-                    bulkUpdateOps.push({
-                        updateOne: {
-                            filter: {scryfallId: card.scryfallId}, 
-                            update: {$push: {price: {value: newPrice}}}
-                        }
-                    });
-                    count++;
-
-                    if (count % 500 === 0) {
-                        Card.collection.bulkWrite(bulkUpdateOps, { ordered: true, w: 1 }, bulkUpdateCallback);
-                        bulkUpdateOps = [];
-                        console.log(`${count} cards updated`);
-                    }
-                    // try {
-                    //     await Card.updateOne(
-                    //         {scryfallId: card.scryfallId}, 
-                    //         {$push: {price: {value: newPrice}}}
-                    //     );
-                    //     count++;
-                    //     if (count % 100 === 0) console.log(`${count} cards updated`);
-                    // } catch (error) {
-                    //     console.log(`Error updating db for ${card.name} with error ${error}`);
-                    // }
+            if (typeof bulkDataCard !== "undefined") {
+                var newPrice = null;
+                if (bulkDataCard.prices.usd !== null) {
+                    newPrice = bulkDataCard.prices.usd;
                 } else {
-                    console.log(`scryfallId ${card.scryfallId} not found in bulk json data`)
+                    newPrice = bulkDataCard.prices.usd_foil;
                 }
-        //     });
-        // }));
+
+                bulkUpdateOps.push({
+                    updateOne: {
+                        filter: {scryfallId: card.scryfallId}, 
+                        update: {$push: {price: {value: newPrice}}}
+                    }
+                });
+                count++;
+
+                if (count % 500 === 0) {
+                    Card.collection.bulkWrite(bulkUpdateOps, { ordered: true, w: 1 }, bulkUpdateCallback);
+                    bulkUpdateOps = [];
+                    console.log(`${count} cards updated`);
+                }
+            } else {
+                console.log(`scryfallId ${card.scryfallId} not found in bulk json data`)
+            }
         }
     } catch (error) {
         console.log(error);
