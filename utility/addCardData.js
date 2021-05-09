@@ -49,7 +49,7 @@ const getBulkCardData = async () => {
 const transformCard = new Transform({
     objectMode: true,
     transform(card, encoding, callback) {
-        let newCard = exports.populateNewCard(card);
+        let newCard = populateNewCard(card);
         if(typeof newCard !== "undefined") {
             this.push(newCard); //push card object to next stream
         }
@@ -151,7 +151,7 @@ const addNewCards = async () => {
                     && card.set_type !== "token" 
                     && card.set_type !== "memorabilia"
         }).map(card => {
-            return exports.populateNewCard(card);
+            return populateNewCard(card);
         });
         console.log(`${mtgFinObjs.length} cards after 2nd filter`);
 
