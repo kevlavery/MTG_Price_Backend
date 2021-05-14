@@ -94,6 +94,7 @@ const updateCardPriceStream = async () => {
 
     let bulkUpdateOps = [];
     for await (const card of Card.find().lean()) {
+        let currentDate = new Date(Date.now());
         let bulkDataCard = bulkData.find(scryfallCard => 
             scryfallCard.id === card.scryfallId
         );
@@ -109,7 +110,10 @@ const updateCardPriceStream = async () => {
                 bulkUpdateOps.push({
                     updateOne: {
                         filter: {scryfallId: card.scryfallId}, 
-                        update: {$push: {price: {value: newPrice}}}
+                        update: {$push: {price: {
+                          date: currentDate,
+                          value: newPrice
+                        }}}
                     }
                 });
                 count++;
