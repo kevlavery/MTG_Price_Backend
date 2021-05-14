@@ -109,7 +109,10 @@ const updateCardPriceStream = async () => {
                 bulkUpdateOps.push({
                     updateOne: {
                         filter: {scryfallId: card.scryfallId}, 
-                        update: {$push: {price: {value: newPrice}}}
+                        update: {$push: {price: {
+                          date: 
+                          value: newPrice
+                        }}}
                     }
                 });
                 count++;

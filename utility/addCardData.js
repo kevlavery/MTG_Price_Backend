@@ -63,13 +63,13 @@ const populateNewCard = (card) => {
         && card.set_type !== "token" 
         && card.set_type !== "memorabilia"
     ) {
-        let newCard = {
+        let newCard = new Card({
             scryfallId: card.id,
             name: card.name,
             cmc: card.cmc,
             scryfallLink: card.scryfall_uri,
             set: card.set_name
-        };
+        });
 
         //add price data
         if (card.prices.usd !== null) {
